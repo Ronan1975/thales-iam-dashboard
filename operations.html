@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thales OneWelcome &mdash; Partner Operations &amp; Market Intelligence</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --surface2: #1a2235;
+  --surface3: #1e293b;
+  --border: #1e293b;
+  --accent: #3b82f6;
+  --accent2: #8b5cf6;
+  --accent3: #06b6d4;
+  --green: #10b981;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ─── HEADER ─── */
+.header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #0f172a 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 32px 48px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -100px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%);
+}
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -200px; left: 20%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%);
+}
+.header-top { display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1; }
+.header h1 {
+  font-size: 26px; font-weight: 700; letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.header .subtitle { color: var(--text2); font-size: 14px; margin-top: 4px; }
+.badge-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+}
+.badge-blue { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.25); }
+.badge-purple { background: rgba(139,92,246,0.12); color: #a78bfa; border: 1px solid rgba(139,92,246,0.25); }
+.badge-cyan { background: rgba(6,182,212,0.12); color: #22d3ee; border: 1px solid rgba(6,182,212,0.25); }
+.badge-amber { background: rgba(245,158,11,0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
+.badge-green { background: rgba(16,185,129,0.12); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+.thales-logo { text-align: right; }
+.thales-logo .company { font-size: 22px; font-weight: 700; color: #fff; letter-spacing: 2px; }
+.thales-logo .division { font-size: 12px; color: var(--accent3); font-weight: 500; }
+.thales-logo .date { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+/* ─── NAV ─── */
+.nav-tabs {
+  display: flex; gap: 2px; padding: 10px 48px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+}
+.nav-tab {
+  padding: 7px 16px; border-radius: 7px;
+  font-size: 12px; font-weight: 600; color: var(--text3);
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  border: 1px solid transparent; user-select: none;
+}
+.nav-tab:hover { color: var(--text); background: var(--surface2); }
+.nav-tab.active { color: var(--accent); background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.3); }
+
+/* ─── SECTIONS ─── */
+.section { display: none; padding: 28px 48px 48px; max-width: 1440px; margin: 0 auto; }
+.section.active { display: block; }
+.section-title {
+  font-size: 20px; font-weight: 700; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-title .icon { font-size: 22px; }
+.section-subtitle { font-size: 13px; color: var(--text2); margin: -12px 0 24px 32px; }
+
+/* ─── CARD SYSTEM ─── */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-bottom: 28px; }
+.card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px;
+  transition: border-color 0.2s, transform 0.15s;
+}
+.card:hover { border-color: rgba(59,130,246,0.25); transform: translateY(-1px); }
+.card h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: #fff; }
+.card p { font-size: 12.5px; color: var(--text2); line-height: 1.7; }
+.card .tag {
+  display: inline-block; padding: 2px 8px; border-radius: 4px;
+  font-size: 10px; font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* ─── STAT CARDS ─── */
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px; text-align: center;
+}
+.stat-card .val { font-size: 28px; font-weight: 800; color: #fff; }
+.stat-card .label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px; }
+.stat-card .delta { font-size: 11px; margin-top: 4px; font-weight: 600; }
+.up { color: var(--green); }
+.dn { color: var(--red); }
+
+/* ─── CHARTS ─── */
+.chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+.chart-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px;
+}
+.chart-box h4 { font-size: 13px; font-weight: 700; margin-bottom: 14px; color: var(--text); }
+.chart-box canvas { max-height: 260px; }
+
+/* ─── WIDE CARD ─── */
+.wide {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px; margin-bottom: 20px;
+}
+.wide h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: #fff; }
+.wide p { font-size: 12.5px; color: var(--text2); line-height: 1.8; }
+.wide ul { list-style: none; margin-top: 10px; }
+.wide li { font-size: 12.5px; color: var(--text2); padding: 3px 0 3px 18px; position: relative; }
+.wide li::before { content: '\2192'; position: absolute; left: 0; color: var(--accent); font-size: 12px; }
+
+.highlight {
+  background: linear-gradient(135deg, rgba(59,130,246,0.06), rgba(139,92,246,0.06));
+  border: 1px solid rgba(59,130,246,0.15); border-radius: var(--radius);
+  padding: 16px 20px; margin: 14px 0;
+}
+.highlight p { font-size: 13px; color: var(--text); }
+
+/* ─── TABLE ─── */
+.tbl { width: 100%; border-collapse: collapse; margin-bottom: 28px; font-size: 12.5px; }
+.tbl th {
+  text-align: left; padding: 10px 14px;
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px;
+  color: var(--text3); border-bottom: 1px solid var(--border); background: var(--surface);
+}
+.tbl td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--text2); }
+.tbl tr:hover td { background: rgba(59,130,246,0.02); }
+
+/* ─── SWOT ─── */
+.matrix { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; }
+.mcell { background: var(--surface); border-radius: var(--radius); padding: 22px; border: 1px solid var(--border); }
+.mcell h4 { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+.mcell ul { list-style: none; }
+.mcell li { font-size: 12px; color: var(--text2); padding: 5px 0 5px 14px; position: relative; }
+.mcell li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; }
+.ms h4 { color: var(--green); } .ms li::before { background: var(--green); }
+.mw h4 { color: var(--red); } .mw li::before { background: var(--red); }
+.mo h4 { color: var(--accent); } .mo li::before { background: var(--accent); }
+.mt h4 { color: var(--amber); } .mt li::before { background: var(--amber); }
+
+/* ─── TIMELINE ─── */
+.timeline { position: relative; padding-left: 28px; margin-bottom: 28px; }
+.timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+.tl-item { position: relative; margin-bottom: 22px; }
+.tl-item::before {
+  content: ''; position: absolute; left: -25px; top: 5px;
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 2px solid var(--accent); background: var(--bg);
+}
+.tl-item.done::before { background: var(--green); border-color: var(--green); }
+.tl-item.now::before { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 8px rgba(59,130,246,0.5); }
+.tl-item h4 { font-size: 13px; font-weight: 700; color: #fff; }
+.tl-item .date { font-size: 11px; color: var(--text3); }
+.tl-item p { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+/* ─── FLOW ─── */
+.flow { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
+.fn {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 18px; text-align: center; min-width: 130px;
+}
+.fn .ft { font-size: 11px; font-weight: 700; color: #fff; }
+.fn .fs { font-size: 10px; color: var(--text3); margin-top: 2px; }
+.fa { font-size: 18px; color: var(--accent); }
+
+/* ─── PILLARS ─── */
+.pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+.pillar {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.pillar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.pb::before { background: var(--accent); }
+.pp::before { background: var(--accent2); }
+.pc::before { background: var(--accent3); }
+.pg::before { background: var(--green); }
+.pa::before { background: var(--amber); }
+.pillar .pi { font-size: 26px; margin-bottom: 10px; }
+.pillar h4 { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.pillar p { font-size: 11.5px; color: var(--text2); }
+
+/* ─── GSI PROFILE CARDS ─── */
+.gsi-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px; margin-bottom: 16px;
+  display: grid; grid-template-columns: 200px 1fr; gap: 20px;
+  transition: border-color 0.2s;
+}
+.gsi-card:hover { border-color: rgba(59,130,246,0.3); }
+.gsi-left { border-right: 1px solid var(--border); padding-right: 20px; }
+.gsi-left h3 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.gsi-left .gsi-rev { font-size: 22px; font-weight: 800; color: var(--accent); }
+.gsi-left .gsi-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.gsi-left .gsi-priority {
+  display: inline-block; margin-top: 10px; padding: 3px 10px;
+  border-radius: 4px; font-size: 11px; font-weight: 700;
+}
+.p1 { background: rgba(16,185,129,0.15); color: var(--green); }
+.p2 { background: rgba(245,158,11,0.15); color: var(--amber); }
+.gsi-right { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.gsi-detail h5 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text3); margin-bottom: 4px; }
+.gsi-detail p { font-size: 12px; color: var(--text2); line-height: 1.6; }
+
+/* ─── ACCORDION ─── */
+.accordion { margin-bottom: 28px; }
+.acc-item { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; }
+.acc-header {
+  background: var(--surface); padding: 14px 20px;
+  cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; font-weight: 700; color: #fff; user-select: none;
+  transition: background 0.2s;
+}
+.acc-header:hover { background: var(--surface2); }
+.acc-header .arr { transition: transform 0.3s; font-size: 14px; color: var(--text3); }
+.acc-item.open .acc-header .arr { transform: rotate(180deg); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: var(--surface); }
+.acc-body-inner { padding: 0 20px 18px; font-size: 12.5px; color: var(--text2); line-height: 1.7; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1024px) {
+  .header { padding: 24px; }
+  .nav-tabs { padding: 10px 24px; }
+  .section { padding: 24px; }
+  .card-grid, .card-grid-3, .chart-row, .matrix, .pillars { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .gsi-card { grid-template-columns: 1fr; }
+  .gsi-left { border-right: none; border-bottom: 1px solid var(--border); padding-right: 0; padding-bottom: 14px; }
+}
+@media (max-width: 600px) {
+  .stat-grid { grid-template-columns: 1fr; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>Agentic AI &times; IAM / Cybersecurity</h1>
+      <div class="subtitle">OneWelcome Partner Operations &amp; Market Intelligence</div>
+      <div class="badge-row">
+        <span class="badge badge-blue">IAM</span>
+        <span class="badge badge-purple">Agentic AI</span>
+        <span class="badge badge-cyan">CIAM</span>
+        <span class="badge badge-amber">Cybersecurity</span>
+        <span class="badge badge-green">Operations</span>
+      </div>
+    </div>
+    <div class="thales-logo">
+      <div class="company">THALES</div>
+      <div class="division">OneWelcome &middot; Identity Platform</div>
+      <div class="date">Q2 2026 &middot; Confidential</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ NAV ═══════════ -->
+<div class="nav-tabs">
+  <div class="nav-tab active" data-tab="overview">Executive Summary</div>
+  <div class="nav-tab" data-tab="market">Market Intelligence</div>
+  <div class="nav-tab" data-tab="agentic">Agentic AI Story</div>
+  <div class="nav-tab" data-tab="gsi-transform">GSI Transformation</div>
+  <div class="nav-tab" data-tab="gsi-profiles">GSI Profiles &amp; Intel</div>
+  <div class="nav-tab" data-tab="gsi-playbook">GSI Playbook</div>
+  <div class="nav-tab" data-tab="product">Product Landscape</div>
+  <div class="nav-tab" data-tab="competitive">Competitive Position</div>
+  <div class="nav-tab" data-tab="messaging">Messaging &amp; Differentiators</div>
+  <div class="nav-tab" data-tab="mythos">Mythos Impact</div>
+  <div class="nav-tab" data-tab="gsi-deep">GSI Deep Intel &amp; Clients</div>
+  <div class="nav-tab" data-tab="analysts">Analyst Reports &amp; Gartner</div>
+  <div class="nav-tab" data-tab="omdia">Omdia IAA Market</div>
+  <div class="nav-tab" data-tab="pipeline">Pipeline &amp; Operations</div>
+  <div class="nav-tab" data-tab="europe">European Opportunities</div>
+  <div class="nav-tab" data-tab="customers">OneWelcome Customers</div>
+  <div class="nav-tab" data-tab="build">What to Build</div>
+  <div class="nav-tab" data-tab="mena">Middle East &amp; Expansion</div>
+  <div class="nav-tab" data-tab="incubation" style="color:var(--amber)">&#9889; AI Incubation Playbook</div>
+  <div class="nav-tab" data-tab="references">Sources &amp; References</div>
+  <div class="nav-tab" data-tab="roadmap">Strategic Roadmap</div>
+</div>
+<div class="nav-tabs">
+  <div class="nav-tab active" data-tab="omdia">Omdia IAA Market</div>
+  <div class="nav-tab" data-tab="pipeline">Pipeline &amp; Operations</div>
+  <div class="nav-tab" data-tab="europe">European Opportunities</div>
+  <div class="nav-tab" data-tab="customers">OneWelcome Customers &amp; Gaps</div>
+  <div class="nav-tab" data-tab="build">Product Roadmap: What to Build</div>
+  <div class="nav-tab" data-tab="mena">Middle East &amp; Expansion</div>
+  <div class="nav-tab" style="border-left:1px solid var(--border);margin-left:8px;padding-left:16px"><a href="index.html" style="color:var(--accent3);text-decoration:none">&#8592; Agentic AI Dashboard</a></div>
+</div>
+<div class="section active" id="omdia">
+  <div class="section-title"><span class="icon">&#128202;</span> Omdia IAA Market Tracker &mdash; 2H25 Analysis</div>
+  <div class="section-subtitle">Source: Omdia Identity, Authentication, Access Market Tracker (Don Tait, Senior Analyst). Powers Thales partner positioning and QBR preparation.</div>
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="val" style="color:var(--accent)">$45.9B</div><div class="label">IAA Market 2025</div><div class="delta up">&rarr; $51.7B in 2026 (+11.2%)</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--amber)">1.03%</div><div class="label">Thales Market Share (1H25)</div><div class="delta dn">Down from 1.15% (1H24)</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--accent2)">~$473M</div><div class="label">Thales IAA Revenue</div><div class="delta">Rank #9 globally</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--text3)">450+</div><div class="label">Vendors in Market</div><div class="delta">Top 12 hold just ~30% share</div></div>
+  </div>
+
+  <div class="wide" style="border-color:rgba(245,158,11,0.3)">
+    <h3 style="color:var(--amber)">&#9888; Share Erosion Alert</h3>
+    <p>Thales IAA market share declined from <strong>1.15% (1H24) &rarr; 1.12% (2H24) &rarr; 1.03% (1H25)</strong>. While share erosion in a fragmenting market is partly structural (&ldquo;Others&rdquo; grew from 68.8% to 70.4%), the trend needs reversing. Partner revenue of <strong>&euro;157.5M</strong> represents significant partner-driven contribution. The CyberArk/Palo Alto merger creates a $25B platform competitor.</p>
+  </div>
+
+  <div class="chart-row">
+    <div class="chart-box"><h4>IAA Market Segments ($B, 2025)</h4><canvas id="c_iaa_seg"></canvas></div>
+    <div class="chart-box"><h4>Top Vendor Market Share (1H25)</h4><canvas id="c_iaa_share"></canvas></div>
+  </div>
+
+  <table class="tbl">
+    <thead><tr><th>Vendor</th><th>1H24</th><th>2H24</th><th>1H25</th><th>Trend</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Okta</strong></td><td>6.41%</td><td>6.21%</td><td>5.98%</td><td style="color:var(--red)">&#9660; Declining</td></tr>
+      <tr><td><strong>Microsoft</strong></td><td>3.00%</td><td>2.86%</td><td>2.81%</td><td style="color:var(--red)">&#9660; Declining</td></tr>
+      <tr><td><strong>CyberArk</strong></td><td>2.29%</td><td>2.58%</td><td>2.75%</td><td style="color:var(--green)">&#9650; Growing</td></tr>
+      <tr><td><strong>SailPoint</strong></td><td>1.80%</td><td>2.45%</td><td>2.07%</td><td style="color:var(--amber)">&#9670; Volatile</td></tr>
+      <tr><td><strong>Ping Identity</strong></td><td>2.10%</td><td>1.93%</td><td>1.86%</td><td style="color:var(--red)">&#9660; Declining</td></tr>
+      <tr><td><strong>OpenText</strong></td><td>1.96%</td><td>1.79%</td><td>1.67%</td><td style="color:var(--red)">&#9660; Declining</td></tr>
+      <tr><td><strong>IBM</strong></td><td>1.74%</td><td>1.67%</td><td>1.58%</td><td style="color:var(--red)">&#9660; Declining</td></tr>
+      <tr><td><strong>Cisco</strong></td><td>1.52%</td><td>1.38%</td><td>1.26%</td><td style="color:var(--red)">&#9660; Declining</td></tr>
+      <tr style="background:rgba(245,158,11,0.08)"><td><strong>Thales</strong></td><td>1.15%</td><td>1.12%</td><td>1.03%</td><td style="color:var(--red)">&#9660; Declining</td></tr>
+      <tr><td><strong>BeyondTrust</strong></td><td>1.03%</td><td>1.00%</td><td>0.94%</td><td style="color:var(--red)">&#9660; Declining</td></tr>
+      <tr><td><em>Others (450+ vendors)</em></td><td>68.76%</td><td>69.09%</td><td>70.40%</td><td style="color:var(--green)">&#9650; Growing</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card-grid card-grid-3">
+    <div class="card" style="border-top:3px solid var(--accent)"><h3>IAA Segments ($B, 2025)</h3><p><strong>Authentication:</strong> $15.8B (34.5%)<br><strong>IDaaS:</strong> $12.3B (26.8%)<br><strong>IGA:</strong> $10.1B (22.0%)<br><strong>PAM:</strong> $5.0B (10.8%)<br><strong>On-Prem IAM:</strong> $2.8B (6.0%)</p></div>
+    <div class="card" style="border-top:3px solid var(--accent2)"><h3>Regional Split</h3><p><strong>North America:</strong> 47.1%<br><strong>Western Europe:</strong> 19.1%<br><strong>Central/Southern Asia:</strong> 9.8%<br><strong>Eastern Europe:</strong> 7.8%<br><strong>Middle East:</strong> 3.0%<br><strong>Africa:</strong> 1.9%</p></div>
+    <div class="card" style="border-top:3px solid var(--green)"><h3>Omdia 2026 Predictions</h3><p><strong>1.</strong> AI Agents: 84% of orgs using/planning in 12&ndash;18 months (33% for customer identity, 28% for access mgmt)<br><strong>2.</strong> Fine-Grained Authorization (FGA) gaining momentum<br><strong>3.</strong> NHI ratio hitting 100:1 vs humans</p></div>
+  </div>
+
+  <div class="wide"><h3>Omdia Vendor Success Factors</h3>
+    <ul>
+      <li><strong>Platform Integration:</strong> Unified IAM + PAM + governance vs point solutions. Full identity lifecycle coverage.</li>
+      <li><strong>Zero-Trust Leadership:</strong> Continuous verification, context-aware controls, granular policy enforcement across all identity types.</li>
+      <li><strong>AI-Powered Innovation:</strong> Real-time threat detection, automated risk assessment, behavioural monitoring, dynamic authentication.</li>
+    </ul>
+  </div>
+
+  <div class="wide" style="border-color:rgba(59,130,246,0.3)"><h3>Thales Position Analysis</h3>
+    <p><strong>Share:</strong> 1.03% (Rank #9) &middot; <strong>Revenue:</strong> ~$473M IAA &middot; <strong>Trend:</strong> Declining in fragmenting market</p>
+    <ul>
+      <li><strong>Strengths:</strong> OneWelcome CIAM, CipherTrust NHI capabilities, Luna HSM authentication, Imperva acquisition synergies, strong FSI vertical</li>
+      <li><strong>Risks:</strong> Share erosion 1.15% &rarr; 1.03%, Palo Alto/CyberArk mega-merger, IDaaS market dominated by Okta (13.6%), 450+ vendor fragmentation</li>
+      <li><strong>Opportunities:</strong> NHI/Agentic AI first-mover with GSIs, FGA integration with CIAM, DORA/NIS2 compliance offerings, Authorization-centric positioning</li>
+    </ul>
+    <p style="margin-top:8px"><strong>Market drivers:</strong> Security breach escalation, AI/NHI explosion, Zero-trust adoption, digital transformation, regulatory compliance (DORA, NIS2, PSD3)</p>
+    <p><strong>Market inhibitors:</strong> Global instability, budget constraints, skills shortage (5M gap), market fragmentation (450+ vendors), platformization pressure</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- PIPELINE & OPERATIONS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section" id="pipeline">
+  <div class="section-title"><span class="icon">&#128176;</span> Partner Pipeline &amp; Operations</div>
+  <div class="section-subtitle">GSI deal pipeline, regional breakdown, scorecard, and investment scenarios. Source: Thales Partner Platform operational data.</div>
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="val" style="color:var(--accent)">&euro;85M</div><div class="label">Total Partner Revenue</div><div class="delta">Target: &euro;100M (85%)</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--accent2)">&euro;141M</div><div class="label">Joint Pipeline</div><div class="delta">Target: &euro;160M (88%)</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--green)">54</div><div class="label">Active Deals</div><div class="delta">Target: 65 (83%)</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--amber)">29%</div><div class="label">Win Rate</div><div class="delta">Target: 35% (needs attention)</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--accent3)">&euro;2.8M</div><div class="label">Avg Deal Size</div><div class="delta">Target: &euro;3.0M (93%)</div></div>
+  </div>
+
+  <div class="wide"><h3>GSI Partner Scorecard</h3></div>
+  <table class="tbl">
+    <thead><tr><th>GSI</th><th>Tier</th><th>Score</th><th>Revenue</th><th>Pipeline</th><th>Deals</th><th>Win Rate</th><th>Certified</th><th>Trend</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(59,130,246,0.04)"><td><strong>Deloitte</strong></td><td style="color:var(--amber);font-weight:700">Platinum</td><td>78</td><td>&euro;42M</td><td>&euro;68M</td><td>24</td><td>34%</td><td>28</td><td style="color:var(--green)">+15%</td></tr>
+      <tr><td><strong>Accenture</strong></td><td style="color:var(--text2);font-weight:700">Gold</td><td>65</td><td>&euro;28M</td><td>&euro;45M</td><td>18</td><td>28%</td><td>15</td><td style="color:var(--green)">+22%</td></tr>
+      <tr><td><strong>Capgemini</strong></td><td style="color:var(--text3);font-weight:700">Silver</td><td>52</td><td>&euro;15M</td><td>&euro;28M</td><td>12</td><td>22%</td><td>8</td><td style="color:var(--green)">+8%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="wide"><h3>Active Deal Pipeline (Top Deals by Value)</h3></div>
+  <table class="tbl">
+    <thead><tr><th>Deal</th><th>GSI</th><th>Region</th><th>Stage</th><th>Value</th><th>Forecast</th></tr></thead>
+    <tbody>
+      <tr><td>HSBC Customer Auth Upgrade Ph2</td><td>Deloitte</td><td>UK</td><td style="color:var(--green);font-weight:700">Closed-Won</td><td>&euro;5.5M</td><td>Closed</td></tr>
+      <tr><td>BNP Paribas CIAM Modernization</td><td>Deloitte</td><td>France</td><td>Proposal</td><td>&euro;4.2M</td><td>Commit</td></tr>
+      <tr><td>Standard Chartered APAC CIAM</td><td>Accenture</td><td>UK</td><td>Negotiation</td><td>&euro;4.1M</td><td>Commit</td></tr>
+      <tr><td>Barclays Digital Onboarding</td><td>Accenture</td><td>UK</td><td>Proposal</td><td>&euro;3.8M</td><td>Best Case</td></tr>
+      <tr><td>ING Digital Identity Platform</td><td>Deloitte</td><td>Benelux</td><td>Negotiation</td><td>&euro;3.1M</td><td>Commit</td></tr>
+      <tr><td>JPMorgan API Security Framework</td><td>Accenture</td><td>US</td><td>Qualified</td><td>&euro;2.5M</td><td>Upside</td></tr>
+      <tr><td>ABN AMRO Identity Refresh</td><td>Capgemini</td><td>Benelux</td><td>Qualified</td><td>&euro;2.3M</td><td>Upside</td></tr>
+      <tr><td>Commerzbank NHI Governance</td><td>Deloitte</td><td>DACH</td><td>Proposal</td><td>&euro;2.2M</td><td>Best Case</td></tr>
+      <tr><td>Credit Agricole Identity Hub</td><td>Accenture</td><td>France</td><td>Identified</td><td>&euro;2.1M</td><td>Pipeline</td></tr>
+      <tr><td>La Banque Postale CIAM</td><td>Capgemini</td><td>France</td><td>Proposal</td><td>&euro;1.9M</td><td>Best Case</td></tr>
+      <tr><td>Deutsche Bank NHI Discovery</td><td>Deloitte</td><td>DACH</td><td>Qualified</td><td>&euro;1.8M</td><td>Best Case</td></tr>
+      <tr><td>Emirates NBD Digital Identity</td><td>Deloitte</td><td>Middle East</td><td>Identified</td><td>&euro;1.5M</td><td>Pipeline</td></tr>
+    </tbody>
+  </table>
+
+  <div class="wide"><h3>Regional Pipeline Breakdown</h3></div>
+  <div class="chart-row">
+    <div class="chart-box"><h4>Pipeline by Region (&euro;M)</h4><canvas id="c_region_pipe"></canvas></div>
+    <div class="chart-box"><h4>Investment Scenario Modeling</h4><canvas id="c_invest_scenario"></canvas></div>
+  </div>
+
+  <table class="tbl">
+    <thead><tr><th>Region</th><th>Pipeline</th><th>Deals</th><th>Key Accounts</th><th>Regulation</th><th>Growth</th></tr></thead>
+    <tbody>
+      <tr><td><strong>France</strong></td><td>&euro;32M</td><td>15</td><td>BNP Paribas, SocGen, Credit Agricole, La Banque Postale</td><td>DORA + NIS2</td><td style="color:var(--green)">+14%</td></tr>
+      <tr><td><strong>UK</strong></td><td>&euro;28M</td><td>13</td><td>HSBC, Barclays, Lloyds, Standard Chartered</td><td>FCA Consumer Duty</td><td style="color:var(--green)">+16%</td></tr>
+      <tr><td><strong>Benelux</strong></td><td>&euro;22M</td><td>11</td><td>ING, ABN AMRO, Rabobank, KBC</td><td>DORA + DNB</td><td style="color:var(--green)">+11%</td></tr>
+      <tr><td><strong>DACH</strong></td><td>&euro;18M</td><td>8</td><td>Deutsche Bank, Commerzbank, Swiss Re, Zurich</td><td>DORA + BaFin</td><td style="color:var(--green)">+19%</td></tr>
+      <tr><td><strong>US</strong></td><td>&euro;15M</td><td>6</td><td>JPMorgan, Citi, Wells Fargo, Goldman Sachs</td><td>SEC Cyber + NYDFS</td><td style="color:var(--green)">+28%</td></tr>
+      <tr><td><strong>Middle East</strong></td><td>&euro;8M</td><td>4</td><td>Emirates NBD, QNB, Saudi National Bank</td><td>CBUAE + SAMA</td><td style="color:var(--green)">+45%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="wide"><h3>Investment Scenarios</h3></div>
+  <table class="tbl">
+    <thead><tr><th>Scenario</th><th>Investment</th><th>Headcount</th><th>Pipeline Target</th><th>Revenue Target</th><th>ROI</th><th>Timeline</th></tr></thead>
+    <tbody>
+      <tr><td style="color:var(--text3)"><strong>Low</strong></td><td>&euro;500K</td><td>2</td><td>&euro;20M</td><td>&euro;8M</td><td>16x</td><td>6 months</td></tr>
+      <tr style="background:rgba(59,130,246,0.04)"><td style="color:var(--accent)"><strong>Medium (Recommended)</strong></td><td>&euro;1.2M</td><td>5</td><td>&euro;55M</td><td>&euro;22M</td><td>18x</td><td>12 months</td></tr>
+      <tr><td style="color:var(--green)"><strong>High</strong></td><td>&euro;2.5M</td><td>10</td><td>&euro;120M</td><td>&euro;48M</td><td>19x</td><td>18 months</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- EUROPEAN OPPORTUNITIES -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section" id="europe">
+  <div class="section-title"><span class="icon">&#127466;&#127482;</span> European Market Opportunities</div>
+  <div class="section-subtitle">Regulatory tailwinds, market sizing, and demand drivers across European markets</div>
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="val" style="color:var(--accent)">$6.7B</div><div class="label">Europe IAM Market 2025</div><div class="delta up">CAGR 10-12% &rarr; $9.8B by 2030</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--red)">443/day</div><div class="label">EU Data Breach Notifications</div><div class="delta dn">+22% YoY (DLA Piper 2026)</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--amber)">&euro;7.1B</div><div class="label">Cumulative GDPR Fines</div><div class="delta dn">&euro;1.2B in 2025 alone</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--green)">22/27</div><div class="label">EU States Transposed NIS2</div><div class="delta up">Enforcement ramping 2026</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--accent2)">~10%</div><div class="label">EU Verification Attempts = Fraud</div><div class="delta dn">2.3x increase YoY (Sumsub)</div></div>
+  </div>
+
+  <div class="card-grid card-grid-3">
+    <div class="card" style="border-top:3px solid var(--red)">
+      <h3>NIS2: Mandatory IAM Across 18 Sectors</h3>
+      <p>NIS2 mandates access control, identity management, and MFA across all essential and important entities. 22 of 27 states have transposed. First audit deadline extended to June 30, 2026. Fines up to <strong>&euro;10M or 2% global turnover</strong>. Management personally accountable. <em>Source: ECSO Tracker; ENISA June 2025</em></p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--amber)">
+      <h3>DORA: 22,000 Financial Entities</h3>
+      <p>DORA applies to ~22,000 financial entities. Requires real-time access monitoring, privileged session recording, JIT provisioning, incident reporting within 4 hours. Only 50% expected full compliance by end 2025. Fines up to <strong>10% turnover</strong>. BFSI = 25.5% of EU IAM market. <em>Sources: IBM; Epical; Ping Identity</em></p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent2)">
+      <h3>EU AI Act: Identity for High-Risk AI</h3>
+      <p>Full applicability August 2026. Biometric ID systems = high-risk. AI identity verification must meet both eIDAS and AI Act requirements. Audit trails must capture signing events AND AI decision logging. Fines up to <strong>7% global revenue</strong>. <em>Sources: EU Digital Strategy; DataGuard</em></p>
+    </div>
+  </div>
+
+  <div class="wide">
+    <h3>eIDAS 2.0 &amp; EU Digital Identity Wallet</h3>
+    <p><strong>Every EU member state must provide a certified EUDI Wallet by September 2026.</strong> 550 companies across 26 states are in large-scale pilots (POTENTIAL, NOBID, EWC, DC4EU). Use cases: eGov services, bank account opening, SIM registration, mobile driving licence, eSignature, ePrescription. 80% citizen digital ID adoption target by 2030. <strong>Thales is already eIDAS certified and handles 75% of Dutch eHerkenning traffic &mdash; this is a massive head start.</strong></p>
+  </div>
+
+  <div class="wide"><h3>European CIAM Market by Country</h3></div>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="val" style="color:var(--accent);font-size:22px">$1.34B</div><div class="label">UK (2026E)</div><div class="delta">17.4% of EU IAM market</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--accent2);font-size:22px">$1.33B</div><div class="label">Germany (2026E)</div><div class="delta">BSI requirements + AWS ESC</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--accent3);font-size:22px">High Growth</div><div class="label">France</div><div class="delta">ANSSI + sovereign cloud</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--green);font-size:22px">OW Dominant</div><div class="label">Netherlands</div><div class="delta">75% eHerkenning, HQ concentration</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--amber);font-size:22px">Mature</div><div class="label">Nordics</div><div class="delta">High digital adoption, gov services</div></div>
+  </div>
+
+  <div class="wide"><h3>European News &amp; Threat Intelligence</h3></div>
+  <div class="card-grid">
+    <div class="card" style="border-left:3px solid var(--red)"><h3>EU Commission Breached Twice in 2026</h3><p>Jan 30: Ivanti zero-day exploited staff mobile devices. March 24: 350GB+ data stolen from Europa cloud. CERT-EU contained in 9 hours. <em>Sources: The Register; BleepingComputer; TechCrunch</em></p></div>
+    <div class="card" style="border-left:3px solid var(--red)"><h3>EU Fraud Surge: 10% of Verifications</h3><p>EU most-hit region for fraud in 2025. Nearly 10% of verification attempts fraudulent (2.3x YoY). Digitally-presented media 300% more likely AI-generated. Synthetic identities blending real + fake data. <em>Source: Sumsub Identity Fraud Report</em></p></div>
+    <div class="card" style="border-left:3px solid var(--amber)"><h3>$25M Deepfake Fraud: Arup (UK)</h3><p>AI deepfakes used to steal $25M from Arup via fabricated video call. Deepfake-as-a-Service platforms widely available. UK fraud up 19% to 3.9M incidents. Avg loss: GBP 13,342/victim. <em>Sources: WEF; Cyble; Experian</em></p></div>
+    <div class="card" style="border-left:3px solid var(--amber)"><h3>TikTok: &euro;530M GDPR Fine</h3><p>Largest single penalty in 2025. Cumulative GDPR fines now &euro;7.1B. Vodafone DE fined &euro;45M. Capita fined GBP 14M after breach affecting 6.6M individuals. <em>Sources: DLA Piper; The Register; TechRadar</em></p></div>
+    <div class="card" style="border-left:3px solid var(--red)"><h3>M&amp;S Breach: GBP 270&ndash;440M Impact</h3><p>Scattered Spider impersonated employee to IT service desk, obtained password reset. Exfiltrated entire Active Directory (NTDS.dit). Online sales down 5+ days (GBP 3.8M/day). Stock dropped GBP 500M+. Co-op &amp; Harrods hit in same campaign. <strong>Identity was the failure point.</strong> <em>Sources: Specops; BleepingComputer; The Hacker News</em></p></div>
+    <div class="card" style="border-left:3px solid var(--accent)"><h3>PSD3/PSR: New Wave of SCA Requirements</h3><p>Political agreement Nov 2025. PSR entering force Q1&ndash;Q2 2026. Stronger SCA, updated TRA thresholds, convergence with DORA. Banks required to accept EUDI Wallets by Dec 2027. <strong>Doubles compliance-driven IAM demand for financial services.</strong> <em>Sources: Ping Identity; OneSpan; Nortal</em></p></div>
+    <div class="card" style="border-left:3px solid var(--green)"><h3>Gaia-X: Sovereign Data Spaces</h3><p>180+ data spaces entering implementation. Trust labels with compliance/security/governance tiers. Cloud Temple first certified Level 3. Every sovereign data space needs sovereign identity. <em>Source: Gaia-X; Cloud Temple PR</em></p></div>
+  </div>
+
+  <div class="wide"><h3>Sovereign Cloud &amp; Digital Identity</h3></div>
+  <div class="card-grid card-grid-3">
+    <div class="card"><h3>AWS European Sovereign Cloud</h3><p>GA January 2026 in Brandenburg, Germany. Complete data residency, EU operational autonomy, sovereign IAM. Eviden already launched KMS on AWS ESC. <strong>OneWelcome opportunity: sovereign CIAM on AWS ESC.</strong> <em>Source: AWS Security Blog</em></p></div>
+    <div class="card"><h3>Microsoft Sovereign Cloud</h3><p>M365 Local GA in H2 2025. Sovereign Public + Private Cloud. Data stays in EU data centres, EU employees only. <strong>61% of EU CIOs increasing reliance on sovereign solutions.</strong> <em>Source: DataBalance.eu</em></p></div>
+    <div class="card"><h3>EURO-3C Federated Infrastructure</h3><p>EU-backed federated cloud + AI infrastructure. Announced at MWC Barcelona. Sovereign cloud IaaS in Europe projected to <strong>triple to $23B by 2027</strong>. <em>Source: Euronews</em></p></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ONEWELCOME CUSTOMERS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section" id="customers">
+  <div class="section-title"><span class="icon">&#127970;</span> OneWelcome: Customers, Market Position &amp; Competitive Gaps</div>
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="val" style="color:var(--accent)">100+</div><div class="label">OneWelcome Customers</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--green)">75%</div><div class="label">Dutch eHerkenning Traffic</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--accent2)">&euro;100M</div><div class="label">Thales Acquisition Price (2022)</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--amber)">85%</div><div class="label">Revenue via Channel Partners</div></div>
+  </div>
+
+  <div class="wide"><h3>Named Customers (Publicly Confirmed)</h3></div>
+  <table class="tbl">
+    <thead><tr><th>Customer</th><th>Industry</th><th>Country</th><th>Use Case</th></tr></thead>
+    <tbody>
+      <tr><td><strong>European Central Bank</strong></td><td>Central Banking</td><td>EU</td><td>Flagship CIAM deployment</td></tr>
+      <tr><td><strong>PostNL</strong></td><td>Logistics</td><td>Netherlands</td><td>Consumer identity &amp; auth</td></tr>
+      <tr><td><strong>Malakoff Humanis</strong></td><td>Insurance</td><td>France</td><td>Tens of millions of identities, cloud CIAM</td></tr>
+      <tr><td><strong>Aegon</strong></td><td>Insurance/Pension</td><td>Netherlands</td><td>Customer identity</td></tr>
+      <tr><td><strong>NS (Dutch Railways)</strong></td><td>Transport</td><td>Netherlands</td><td>Consumer-facing identity</td></tr>
+      <tr><td><strong>Rijkswaterstaat</strong></td><td>Government</td><td>Netherlands</td><td>Secure login for infrastructure ministry</td></tr>
+      <tr><td><strong>Eneco</strong></td><td>Energy</td><td>Pan-European</td><td>CIAM across multiple EU countries</td></tr>
+      <tr><td><strong>Baloise</strong></td><td>Insurance</td><td>Switzerland</td><td>Customer identity management</td></tr>
+      <tr><td><strong>Admiral Insurance</strong></td><td>Insurance</td><td>UK</td><td>Customer identity</td></tr>
+      <tr><td><strong>NIBC</strong></td><td>Banking</td><td>Netherlands</td><td>Merchant bank CIAM</td></tr>
+      <tr><td><strong>Unive</strong></td><td>Insurance</td><td>Netherlands</td><td>SSO for 140K accounts migrated</td></tr>
+      <tr><td><strong>A.S.R.</strong></td><td>Insurance</td><td>Netherlands</td><td>Unified CX across multiple brands</td></tr>
+      <tr><td><strong>Van Lanschot</strong></td><td>Private Banking</td><td>Netherlands</td><td>Customer identity</td></tr>
+      <tr><td><strong>Menzis, CZ, VGZ</strong></td><td>Health Insurance</td><td>Netherlands</td><td>Health insurer CIAM</td></tr>
+    </tbody>
+  </table>
+
+  <div class="highlight"><p><strong>Pattern:</strong> Customer base is heavily concentrated in <strong>Dutch and French regulated industries</strong>, especially insurance (10+ named insurance customers). ECB is the marquee logo. US Zone launched March 2023 but no named US customers found publicly. <strong>Key tech integration: Guidewire</strong> (insurance platform) &mdash; deepens insurance vertical moat. <strong>85% of revenue via 6,700+ channel partners</strong>. Existing GSI partner pages: Accenture (dedicated page on cpl.thalesgroup.com), Deloitte (strategic alliance PR), Capgemini/DXC/Kyndryl/IBM (PQC ecosystem). <em>Sources: cpl.thalesgroup.com; BusinessWire; FeaturedCustomers.com (71 success stories)</em></p></div>
+
+  <div class="wide"><h3>Product Strengths vs. Competitive Gaps</h3></div>
+  <div class="matrix">
+    <div class="mcell ms"><h4>Where OneWelcome Wins</h4><ul>
+      <li><strong>GDPR/eIDAS compliance</strong> &mdash; built-in, not bolted on. eIDAS certified.</li>
+      <li><strong>Consent management</strong> as a standalone module (Auth0/Okta don&rsquo;t offer this)</li>
+      <li><strong>Identity proofing</strong> built into platform (competitors need 3rd party)</li>
+      <li><strong>Delegated user management</strong> for B2B self-service (native, not add-on)</li>
+      <li><strong>eHerkenning</strong> &mdash; 75% of Dutch gov-to-business auth traffic</li>
+      <li><strong>KuppingerCole Passwordless Leader</strong> &mdash; 5/5 scores</li>
+      <li><strong>Thales HSM</strong> backing &mdash; hardware root of trust no competitor matches</li>
+    </ul></div>
+    <div class="mcell mw"><h4>Critical Gaps vs. Auth0/Okta</h4><ul>
+      <li><strong>Developer experience</strong> &mdash; no free tier, no self-serve signup, weeks to first login vs Auth0&rsquo;s minutes</li>
+      <li><strong>Integration marketplace</strong> &mdash; no equivalent to Okta&rsquo;s 7,000+ integrations</li>
+      <li><strong>Documentation</strong> scattered across 4+ portals (developer.onewelcome, docs.onegini, docs.scaledaccess, thalesdocs)</li>
+      <li><strong>Pricing transparency</strong> &mdash; no public pricing vs Auth0/Okta published tiers</li>
+      <li><strong>Community/ecosystem</strong> &mdash; minimal Stack Overflow presence, fewer tutorials</li>
+      <li><strong>Global footprint</strong> &mdash; primarily EU-hosted, US Zone only since 2023, no APAC</li>
+      <li><strong>Forrester CIAM Wave</strong> &mdash; not in Leaders (Q4 2024). Must improve for next wave.</li>
+      <li><strong>ITDR</strong> &mdash; no identity threat detection. CrowdStrike/Silverfort lead here.</li>
+      <li><strong>Agent Identity</strong> &mdash; no current capability. Greenfield category to own.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- WHAT TO BUILD -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section" id="build">
+  <div class="section-title"><span class="icon">&#128736;</span> Product Roadmap: What OneWelcome Must Build</div>
+  <div class="section-subtitle">Features required to move from Gartner Visionary to Leader and own the AI-era CIAM category</div>
+
+  <div class="wide" style="border-color:rgba(59,130,246,0.3)">
+    <h3>The Niche Marketing Message</h3>
+    <div class="highlight">
+      <p><strong>&ldquo;The only CIAM platform built for the AI era: where every agent has an identity, every interaction has consent, and every action has an audit trail &mdash; backed by defence-grade European trust.&rdquo;</strong></p>
+    </div>
+    <p>This message works because it combines three things no competitor can match simultaneously: (1) AI-era readiness (agent identity), (2) GDPR-native consent infrastructure, and (3) Thales&rsquo;s defence-grade trust heritage. Auth0 has developer experience but not compliance depth. Microsoft has scale but not CIAM focus. CrowdStrike has threat detection but not consent management. <strong>Only OneWelcome can credibly claim all three.</strong></p>
+  </div>
+
+  <div class="pillars" style="grid-template-columns: repeat(4,1fr)">
+    <div class="pillar pb"><div class="pi">&#129302;</div><h4>Agent Identity Mgmt</h4><p>MUST BUILD: Authentication, authorization, scoping, audit for AI agents. First-mover advantage. No CIAM vendor has this yet.</p></div>
+    <div class="pillar pp"><div class="pi">&#128270;</div><h4>ITDR for CIAM</h4><p>MUST BUILD: Real-time identity threat detection for customer-facing identities. Credential stuffing, account takeover, bot detection.</p></div>
+    <div class="pillar pc"><div class="pi">&#128187;</div><h4>Developer Experience 2.0</h4><p>MUST IMPROVE: Free tier, unified docs portal, quick-start SDKs, copy-paste code samples, 10-minute time to first login.</p></div>
+    <div class="pillar pa"><div class="pi">&#127760;</div><h4>EUDI Wallet Integration</h4><p>MUST BUILD: Native support for EU Digital Identity Wallet (September 2026 mandate). Verifiable credential issuance &amp; verification.</p></div>
+  </div>
+
+  <div class="wide"><h3>Full Feature Build Priority Matrix</h3></div>
+  <table class="tbl">
+    <thead><tr><th>Feature</th><th>Priority</th><th>Why</th><th>Competitive Impact</th><th>Build Timeline</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(239,68,68,0.05)"><td><strong>Agent Identity Management (AIM)</strong></td><td style="color:var(--red);font-weight:700">P0 &mdash; URGENT</td><td><strong>Okta shipped &ldquo;Auth for GenAI&rdquo; GA April 30, 2026</strong> (agent auth, Token Vault, LangChain/LlamaIndex SDKs). Cisco extending Zero Trust to agents via Duo. Strata has dynamic agent lifecycle. <strong>Window is closing NOW.</strong></td><td>Must match Okta&rsquo;s feature set + differentiate with consent &amp; HSM</td><td>MVP Q3 2026, GA Q4 2026</td></tr>
+      <tr><td><strong>ITDR for CIAM</strong></td><td style="color:var(--red);font-weight:700">P0 &mdash; Critical</td><td>65.7B identity records exposed in 2025. 90% of IR involves identity.</td><td>Closes gap vs CrowdStrike/Silverfort. Stops customer churn narrative.</td><td>MVP Q3 2026, GA Q4 2026</td></tr>
+      <tr><td><strong>EUDI Wallet / Verifiable Credentials</strong></td><td style="color:var(--red);font-weight:700">P0 &mdash; Critical</td><td>EU mandate September 2026. Thales already eIDAS certified.</td><td>Natural extension. Blocks Auth0/Okta who lack EU heritage.</td><td>Beta Q2 2026, GA Sep 2026</td></tr>
+      <tr><td><strong>Developer Experience Overhaul</strong></td><td style="color:var(--amber);font-weight:700">P1 &mdash; High</td><td>Auth0&rsquo;s main moat. Free tier + unified docs + quick-start SDKs.</td><td>Unlocks PLG motion, SMB market, developer mindshare</td><td>Phased Q3 2026&ndash;Q2 2027</td></tr>
+      <tr><td><strong>AI-Powered Consent Management</strong></td><td style="color:var(--amber);font-weight:700">P1 &mdash; High</td><td>Consent for AI agent-to-human interactions. New consent layer.</td><td>Unique differentiator. No competitor has consent + AI combined.</td><td>MVP Q4 2026</td></tr>
+      <tr><td><strong>Integration Marketplace</strong></td><td style="color:var(--amber);font-weight:700">P1 &mdash; High</td><td>Okta has 7,000+. OneWelcome has none publicly.</td><td>Ecosystem growth, partner attraction, reduced SI dependency</td><td>Launch Q4 2026 (50+ integrations)</td></tr>
+      <tr><td><strong>No-Code Identity Orchestration</strong></td><td style="color:var(--green);font-weight:700">P2 &mdash; Medium</td><td>Visual journey builder for identity flows. Descope/Strivacity lead.</td><td>Reduces implementation time. Makes GSI delivery faster.</td><td>Q1 2027</td></tr>
+      <tr><td><strong>Non-Human Identity (NHI) Governance</strong></td><td style="color:var(--green);font-weight:700">P2 &mdash; Medium</td><td>NHIs outnumber humans <strong>82:1</strong> (Rubrik Zero Labs). 92% of orgs not confident legacy IAM can handle NHI. KuppingerCole published dedicated NHI Leadership Compass. OWASP Top 10 NHI Risks published 2025.</td><td>Bridges CIAM and machine identity. New billing axis.</td><td>Q1 2027</td></tr>
+      <tr><td><strong>Passkeys as Default Auth</strong></td><td style="color:var(--green);font-weight:700">P2 &mdash; Medium</td><td>93% success rate vs 63% legacy. 15B accounts passkey-enabled (FIDO). 60&ndash;80% reduction in help desk resets. Already KuppingerCole Leader here &mdash; needs productization push.</td><td>Already strong (5/5 KuppingerCole). Active nudging + dev SDK needed.</td><td>Enhance Q3 2026</td></tr>
+      <tr><td><strong>Privacy-Preserving Identity (ZKP)</strong></td><td style="color:var(--text3);font-weight:700">P3 &mdash; Future</td><td>ZKP market $1.28B &rarr; $7.59B by 2033 (22% CAGR). Selective disclosure for age verification, credential validation without PII exposure.</td><td>Thought leadership. Research phase. GA 2028+.</td><td>Research 2027</td></tr>
+    </tbody>
+  </table>
+
+  <div class="wide" style="border-color:rgba(239,68,68,0.3)"><h3 style="color:var(--red)">Competitive Threat: What Okta Just Shipped</h3>
+    <p><strong>Auth for GenAI (GA April 30, 2026)</strong>: Purpose-built identity for AI agents. Features: user authentication for agents, Token Vault (secure OAuth 2.0 connections to Gmail/Slack with auto-refresh), asynchronous authorization for long-running tasks, framework integrations (LangChain, LlamaIndex, Google GenKit, Vercel AI SDK), automated access reviews with human owner assignment. <em>Sources: okta.com/newsroom; Okta Showcase 2026</em></p>
+    <p style="margin-top:8px"><strong>Transmit Security (Forrester CIAM Leader)</strong>: Unified fraud + IDV + auth in single platform. Real-time risk scoring via AI/ML across hundreds of telemetry points. Visual journey builder. Multi-session fraud detection. <em>Sources: Forrester Wave CIAM Q4 2024; transmitsecurity.com</em></p>
+    <p style="margin-top:8px"><strong>Ping Identity DaVinci</strong>: Most mature no-code identity orchestration engine. Pre-built passwordless templates. PingOne Protect for real-time threat detection. <em>Source: pingidentity.com</em></p>
+    <p style="margin-top:8px"><strong>OneWelcome&rsquo;s counter</strong>: None of these have (1) GDPR-native consent for AI interactions, (2) hardware-backed agent credentials via HSM, (3) European data sovereignty guarantees, or (4) eIDAS 2.0 wallet integration. <strong>Build the differentiation, don&rsquo;t try to out-feature Auth0 on DX. Win on trust, consent, and compliance.</strong></p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- MIDDLE EAST & EXPANSION -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section" id="mena">
+  <div class="section-title"><span class="icon">&#127758;</span> Middle East, Boutique Partners &amp; AI Embedding Strategy</div>
+  <div class="section-subtitle">Geographic expansion, alternative partner channels, and AI technology embedding for joint propositions</div>
+
+  <div class="wide"><h3>Middle East Opportunity</h3>
+    <p>The Middle East cybersecurity market is projected to exceed <strong>$10B by 2027</strong>. Saudi Vision 2030, UAE NESA regulations, and mega-projects (NEOM, Dubai Digital) are creating massive demand for CIAM infrastructure. Thales already has a strong presence in ME defence &mdash; OneWelcome can ride the existing relationship.</p>
+  </div>
+
+  <div class="card-grid card-grid-3">
+    <div class="card" style="border-top:3px solid var(--green)"><h3>Saudi Arabia &mdash; $2B Digital Identity by 2030</h3><p><strong>Nafath/Absher</strong>: 28.5M enrolled, 470+ digital services. Digital identity market <strong>$0.82B (2024) &rarr; $1.99B by 2030</strong> (16% CAGR). <strong>Thales profiled as key vendor</strong> alongside NEC, IDEMIA, Microsoft. NEOM: $5B data centre with DataVolt. PDPL live since 2023. Cybersecurity market $2.9&ndash;5.1B. <em>Sources: GlobeNewsWire; Mordor Intelligence; BusinessWire</em></p></div>
+    <div class="card" style="border-top:3px solid var(--accent)"><h3>UAE &mdash; 188 Mandatory Security Controls</h3><p><strong>NESA 2026</strong>: Compliance now mandatory (no longer voluntary). 188 controls including 39 P1 mandatory for all entities. MFA required. Penalties AED 500K&ndash;3M for critical infra harm. <strong>UAE Pass</strong>: 5,000+ services, expanding to digital signatures. Cybersecurity market $0.82B &rarr; $1.51B by 2031. <em>Sources: NESA; UAE Pass; MarketDataForecast</em></p></div>
+    <div class="card" style="border-top:3px solid var(--accent2)"><h3>Qatar &amp; GCC &mdash; Tier-1 Cyber Maturity</h3><p>Qatar: <strong>Tier-1 &ldquo;role-model&rdquo;</strong> in Global Cybersecurity Index 2024. National Digital Auth Strategy 2024&ndash;2026. QAR 1.8B (~$494M) government cyber spend. Overall ME cyber market <strong>$16.75B &rarr; $26B by 2030</strong>. <em>Sources: Qatar NCSA; GCO; MarketDataForecast</em></p></div>
+  </div>
+
+  <div class="wide"><h3>Boutique &amp; Mid-Tier SI Partners</h3>
+    <p>Beyond the GSIs, identity-specialist firms offer faster co-sell cycles and deeper technical alignment. These partners can embed OneWelcome into their delivery methodology and become force multipliers.</p>
+  </div>
+
+  <table class="tbl">
+    <thead><tr><th>Partner</th><th>Specialty</th><th>Geography</th><th>Co-Sell Angle</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Wavestone</strong></td><td>Cyber &amp; digital transformation consulting</td><td>France, EU</td><td>NIS2/DORA compliance + CIAM implementation</td></tr>
+      <tr><td><strong>Next Reason</strong></td><td><strong>Existing OneWelcome implementation partner</strong></td><td>Netherlands</td><td>Already handles B2B/B2C CIAM, Identity Broker, migrations from Akamai. <strong>Model for new SI relationships.</strong></td></tr>
+      <tr><td><strong>iC Consult</strong></td><td>World&rsquo;s largest independent IAM SI (850+ identity experts)</td><td>Germany, EU, US, Asia</td><td>Vendor-independent. Partners with PlainID, Omada, CyberArk. Signed AI partnership with IAMONES (Jan 2025).</td></tr>
+      <tr><td><strong>Orange Cyberdefense</strong></td><td>Managed security services, identity</td><td>France, EU, MEA</td><td>MSSP + CIAM bundle for mid-market</td></tr>
+      <tr><td><strong>Nixu (DNV)</strong></td><td>Nordic cybersecurity, IAM specialization</td><td>Nordics, EU</td><td>Nordic market entry, government CIAM</td></tr>
+      <tr><td><strong>NCC Group</strong></td><td>Cybersecurity consulting, assurance</td><td>UK, EU</td><td>Security assurance + CIAM for regulated industries</td></tr>
+      <tr><td><strong>Kudelski Security</strong></td><td>Cybersecurity advisory, Swiss-based</td><td>Switzerland, EU</td><td>Swiss financial services, sovereign identity</td></tr>
+      <tr><td><strong>Protiviti</strong></td><td>Risk, compliance, identity consulting</td><td>Global</td><td>DORA/NIS2 risk assessment + CIAM remediation</td></tr>
+      <tr><td><strong>Turnkey Consulting</strong></td><td>SAP/Oracle identity &amp; GRC</td><td>UK, EU, ME</td><td>ERP identity governance + CIAM layer</td></tr>
+      <tr><td><strong>DarkMatter / CPX</strong></td><td>Cybersecurity (UAE national champion)</td><td>UAE, GCC</td><td>Middle East sovereign identity + CIAM</td></tr>
+      <tr><td><strong>Help AG (e&amp;)</strong></td><td>Cybersecurity services</td><td>UAE, ME</td><td>Managed CIAM for ME enterprises</td></tr>
+      <tr><td><strong>Paramount Computer Systems</strong></td><td>Identity &amp; security distribution</td><td>UAE, GCC</td><td>Channel distribution for OneWelcome in ME</td></tr>
+      <tr><td><strong>sirar by stc</strong></td><td>Cybersecurity arm of Saudi Telecom</td><td>Saudi Arabia</td><td>National telco channel for CIAM in Saudi market</td></tr>
+      <tr><td><strong>GreenEdge</strong></td><td>Systems integrator (200+ implementations)</td><td>UAE, GCC</td><td>Established SI channel across GCC since 2008</td></tr>
+      <tr><td><strong>Eviden (Atos)</strong></td><td>EU sovereign security + Evidian Orbion IDaaS</td><td>France, EU</td><td>Potential frenemy: Orbion competes but SI services complement. Pierre-Yves Jolivet (ex-Thales Cyber VP) now heads Eviden.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="highlight"><p><strong>Thales Accelerate Partner Program</strong> (launched 2025): Unified Thales + Imperva partner programs. 400+ software integration partners. 6,700+ partner organizations. GSI channel is the #1 focus area. <strong>85% of revenue generated through channel partners.</strong> Actively recruiting OneWelcome implementation partners in new markets. <em>Source: Channel Post MEA; cpl.thalesgroup.com</em></p></div>
+
+  <div class="wide"><h3>AI Technology Embedding Strategy</h3>
+    <p>Instead of building AI from scratch, embed frontier LLM capabilities into OneWelcome through partnerships. This creates <strong>joint sales propositions</strong> with AI vendors and positions OneWelcome as the &ldquo;identity layer for AI.&rdquo;</p>
+  </div>
+
+  <div class="card-grid">
+    <div class="card" style="border-left:3px solid var(--accent2)"><h3>Anthropic Partnership</h3><p><strong>Embed Claude</strong> for: AI-powered consent explanation (plain language consent for AI interactions), intelligent identity orchestration (adaptive auth decisions), anomaly detection in CIAM (unusual login patterns, credential stuffing). <em>Precedent: Accenture Cyber.AI built on Claude. Anthropic has enterprise security focus.</em></p></div>
+    <div class="card" style="border-left:3px solid var(--green)"><h3>Google Gemini for Security</h3><p><strong>Embed Gemini</strong> for: threat intelligence enrichment, identity risk scoring, automated security policy generation. <em>Precedent: Google Security Operations platform. Thales already partners with Google Cloud.</em></p></div>
+    <div class="card" style="border-left:3px solid var(--accent)"><h3>Microsoft Copilot for Identity</h3><p><strong>Integrate with Copilot for Security</strong>: natural language identity queries, automated access reviews, AI-driven compliance reporting. <em>Precedent: Microsoft Security Copilot already handles identity-related queries.</em></p></div>
+    <div class="card" style="border-left:3px solid var(--amber)"><h3>Open-Source LLM (Self-Hosted)</h3><p><strong>Deploy sovereign AI</strong>: For government/defence customers who cannot send identity data to external LLMs. Self-hosted models (Llama, Mistral) for on-premise AI-powered identity analytics. <em>Aligns with European digital sovereignty requirements.</em></p></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- AI INCUBATION PLAYBOOK -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<script>
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = '#1e293b';
+Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif';
+Chart.defaults.font.size = 11;
+
+function init() {
+  // IAA Market Segments
+  new Chart(document.getElementById('c_iaa_seg'), {type:'doughnut',data:{labels:['Authentication ($15.8B)','IDaaS ($12.3B)','IGA ($10.1B)','PAM ($5.0B)','On-Prem IAM ($2.8B)'],datasets:[{data:[15.8,12.3,10.1,5.0,2.8],backgroundColor:['#3b82f6','#8b5cf6','#06b6d4','#10b981','#64748b'],borderWidth:0}]},options:{responsive:true,plugins:{legend:{position:'right'}}}});
+  // IAA Market Share
+  new Chart(document.getElementById('c_iaa_share'), {type:'bar',data:{labels:['Okta','Microsoft','CyberArk','SailPoint','Ping','OpenText','IBM','Cisco','Thales','BeyondTrust'],datasets:[{label:'1H24',data:[6.41,3.00,2.29,1.80,2.10,1.96,1.74,1.52,1.15,1.03],backgroundColor:'rgba(148,163,184,0.3)',borderRadius:3},{label:'1H25',data:[5.98,2.81,2.75,2.07,1.86,1.67,1.58,1.26,1.03,0.94],backgroundColor:(ctx)=>ctx.dataIndex===8?'rgba(245,158,11,0.7)':'rgba(59,130,246,0.6)',borderRadius:3}]},options:{responsive:true,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:true,max:7,grid:{color:'#1e293b'}},x:{grid:{display:false}}}}});
+  // Regional Pipeline
+  new Chart(document.getElementById('c_region_pipe'), {type:'bar',data:{labels:['France','UK','Benelux','DACH','US','Middle East'],datasets:[{label:'Pipeline (M)',data:[32,28,22,18,15,8],backgroundColor:['#3b82f6','#8b5cf6','#06b6d4','#10b981','#f59e0b','#ef4444'],borderRadius:5}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#1e293b'}},x:{grid:{display:false}}}}});
+  // Investment Scenarios
+  new Chart(document.getElementById('c_invest_scenario'), {type:'bar',data:{labels:['Low (500K)','Medium (1.2M)','High (2.5M)'],datasets:[{label:'Pipeline (M)',data:[20,55,120],backgroundColor:'rgba(59,130,246,0.6)',borderRadius:5},{label:'Revenue (M)',data:[8,22,48],backgroundColor:'rgba(16,185,129,0.6)',borderRadius:5}]},options:{responsive:true,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:true,grid:{color:'#1e293b'}},x:{grid:{display:false}}}}});
+}
+document.querySelectorAll('.nav-tab').forEach(t=>{t.addEventListener('click',()=>{document.querySelectorAll('.nav-tab').forEach(n=>n.classList.remove('active'));document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));t.classList.add('active');document.getElementById(t.dataset.tab).classList.add('active');});});
+document.querySelectorAll('.acc-header').forEach(h=>{h.addEventListener('click',()=>{const item=h.parentElement;const body=item.querySelector('.acc-body');const inner=body.querySelector('.acc-body-inner');if(item.classList.contains('open')){body.style.maxHeight='0';item.classList.remove('open');}else{body.style.maxHeight=inner.scrollHeight+20+'px';item.classList.add('open');}});});
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
