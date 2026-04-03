@@ -313,6 +313,8 @@ body {
   <div class="nav-tab" data-tab="mythos">Mythos Impact</div>
   <div class="nav-tab" data-tab="gsi-deep">GSI Deep Intel &amp; Clients</div>
   <div class="nav-tab" data-tab="analysts">Analyst Reports &amp; Gartner</div>
+  <div class="nav-tab" data-tab="omdia">Omdia IAA Market</div>
+  <div class="nav-tab" data-tab="pipeline">Pipeline &amp; Operations</div>
   <div class="nav-tab" data-tab="europe">European Opportunities</div>
   <div class="nav-tab" data-tab="customers">OneWelcome Customers</div>
   <div class="nav-tab" data-tab="build">What to Build</div>
@@ -1191,6 +1193,146 @@ body {
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════ -->
+<!-- OMDIA IAA MARKET -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section" id="omdia">
+  <div class="section-title"><span class="icon">&#128202;</span> Omdia IAA Market Tracker &mdash; 2H25 Analysis</div>
+  <div class="section-subtitle">Source: Omdia Identity, Authentication, Access Market Tracker (Don Tait, Senior Analyst). Powers Thales partner positioning and QBR preparation.</div>
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="val" style="color:var(--accent)">$45.9B</div><div class="label">IAA Market 2025</div><div class="delta up">&rarr; $51.7B in 2026 (+11.2%)</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--amber)">1.03%</div><div class="label">Thales Market Share (1H25)</div><div class="delta dn">Down from 1.15% (1H24)</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--accent2)">~$473M</div><div class="label">Thales IAA Revenue</div><div class="delta">Rank #9 globally</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--text3)">450+</div><div class="label">Vendors in Market</div><div class="delta">Top 12 hold just ~30% share</div></div>
+  </div>
+
+  <div class="wide" style="border-color:rgba(245,158,11,0.3)">
+    <h3 style="color:var(--amber)">&#9888; Share Erosion Alert</h3>
+    <p>Thales IAA market share declined from <strong>1.15% (1H24) &rarr; 1.12% (2H24) &rarr; 1.03% (1H25)</strong>. While share erosion in a fragmenting market is partly structural (&ldquo;Others&rdquo; grew from 68.8% to 70.4%), the trend needs reversing. Partner revenue of <strong>&euro;157.5M</strong> represents significant partner-driven contribution. The CyberArk/Palo Alto merger creates a $25B platform competitor.</p>
+  </div>
+
+  <div class="chart-row">
+    <div class="chart-box"><h4>IAA Market Segments ($B, 2025)</h4><canvas id="c_iaa_seg"></canvas></div>
+    <div class="chart-box"><h4>Top Vendor Market Share (1H25)</h4><canvas id="c_iaa_share"></canvas></div>
+  </div>
+
+  <table class="tbl">
+    <thead><tr><th>Vendor</th><th>1H24</th><th>2H24</th><th>1H25</th><th>Trend</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Okta</strong></td><td>6.41%</td><td>6.21%</td><td>5.98%</td><td style="color:var(--red)">&#9660; Declining</td></tr>
+      <tr><td><strong>Microsoft</strong></td><td>3.00%</td><td>2.86%</td><td>2.81%</td><td style="color:var(--red)">&#9660; Declining</td></tr>
+      <tr><td><strong>CyberArk</strong></td><td>2.29%</td><td>2.58%</td><td>2.75%</td><td style="color:var(--green)">&#9650; Growing</td></tr>
+      <tr><td><strong>SailPoint</strong></td><td>1.80%</td><td>2.45%</td><td>2.07%</td><td style="color:var(--amber)">&#9670; Volatile</td></tr>
+      <tr><td><strong>Ping Identity</strong></td><td>2.10%</td><td>1.93%</td><td>1.86%</td><td style="color:var(--red)">&#9660; Declining</td></tr>
+      <tr><td><strong>OpenText</strong></td><td>1.96%</td><td>1.79%</td><td>1.67%</td><td style="color:var(--red)">&#9660; Declining</td></tr>
+      <tr><td><strong>IBM</strong></td><td>1.74%</td><td>1.67%</td><td>1.58%</td><td style="color:var(--red)">&#9660; Declining</td></tr>
+      <tr><td><strong>Cisco</strong></td><td>1.52%</td><td>1.38%</td><td>1.26%</td><td style="color:var(--red)">&#9660; Declining</td></tr>
+      <tr style="background:rgba(245,158,11,0.08)"><td><strong>Thales</strong></td><td>1.15%</td><td>1.12%</td><td>1.03%</td><td style="color:var(--red)">&#9660; Declining</td></tr>
+      <tr><td><strong>BeyondTrust</strong></td><td>1.03%</td><td>1.00%</td><td>0.94%</td><td style="color:var(--red)">&#9660; Declining</td></tr>
+      <tr><td><em>Others (450+ vendors)</em></td><td>68.76%</td><td>69.09%</td><td>70.40%</td><td style="color:var(--green)">&#9650; Growing</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card-grid card-grid-3">
+    <div class="card" style="border-top:3px solid var(--accent)"><h3>IAA Segments ($B, 2025)</h3><p><strong>Authentication:</strong> $15.8B (34.5%)<br><strong>IDaaS:</strong> $12.3B (26.8%)<br><strong>IGA:</strong> $10.1B (22.0%)<br><strong>PAM:</strong> $5.0B (10.8%)<br><strong>On-Prem IAM:</strong> $2.8B (6.0%)</p></div>
+    <div class="card" style="border-top:3px solid var(--accent2)"><h3>Regional Split</h3><p><strong>North America:</strong> 47.1%<br><strong>Western Europe:</strong> 19.1%<br><strong>Central/Southern Asia:</strong> 9.8%<br><strong>Eastern Europe:</strong> 7.8%<br><strong>Middle East:</strong> 3.0%<br><strong>Africa:</strong> 1.9%</p></div>
+    <div class="card" style="border-top:3px solid var(--green)"><h3>Omdia 2026 Predictions</h3><p><strong>1.</strong> AI Agents: 84% of orgs using/planning in 12&ndash;18 months (33% for customer identity, 28% for access mgmt)<br><strong>2.</strong> Fine-Grained Authorization (FGA) gaining momentum<br><strong>3.</strong> NHI ratio hitting 100:1 vs humans</p></div>
+  </div>
+
+  <div class="wide"><h3>Omdia Vendor Success Factors</h3>
+    <ul>
+      <li><strong>Platform Integration:</strong> Unified IAM + PAM + governance vs point solutions. Full identity lifecycle coverage.</li>
+      <li><strong>Zero-Trust Leadership:</strong> Continuous verification, context-aware controls, granular policy enforcement across all identity types.</li>
+      <li><strong>AI-Powered Innovation:</strong> Real-time threat detection, automated risk assessment, behavioural monitoring, dynamic authentication.</li>
+    </ul>
+  </div>
+
+  <div class="wide" style="border-color:rgba(59,130,246,0.3)"><h3>Thales Position Analysis</h3>
+    <p><strong>Share:</strong> 1.03% (Rank #9) &middot; <strong>Revenue:</strong> ~$473M IAA &middot; <strong>Trend:</strong> Declining in fragmenting market</p>
+    <ul>
+      <li><strong>Strengths:</strong> OneWelcome CIAM, CipherTrust NHI capabilities, Luna HSM authentication, Imperva acquisition synergies, strong FSI vertical</li>
+      <li><strong>Risks:</strong> Share erosion 1.15% &rarr; 1.03%, Palo Alto/CyberArk mega-merger, IDaaS market dominated by Okta (13.6%), 450+ vendor fragmentation</li>
+      <li><strong>Opportunities:</strong> NHI/Agentic AI first-mover with GSIs, FGA integration with CIAM, DORA/NIS2 compliance offerings, Authorization-centric positioning</li>
+    </ul>
+    <p style="margin-top:8px"><strong>Market drivers:</strong> Security breach escalation, AI/NHI explosion, Zero-trust adoption, digital transformation, regulatory compliance (DORA, NIS2, PSD3)</p>
+    <p><strong>Market inhibitors:</strong> Global instability, budget constraints, skills shortage (5M gap), market fragmentation (450+ vendors), platformization pressure</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- PIPELINE & OPERATIONS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section" id="pipeline">
+  <div class="section-title"><span class="icon">&#128176;</span> Partner Pipeline &amp; Operations</div>
+  <div class="section-subtitle">GSI deal pipeline, regional breakdown, scorecard, and investment scenarios. Source: Thales Partner Platform operational data.</div>
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="val" style="color:var(--accent)">&euro;85M</div><div class="label">Total Partner Revenue</div><div class="delta">Target: &euro;100M (85%)</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--accent2)">&euro;141M</div><div class="label">Joint Pipeline</div><div class="delta">Target: &euro;160M (88%)</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--green)">54</div><div class="label">Active Deals</div><div class="delta">Target: 65 (83%)</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--amber)">29%</div><div class="label">Win Rate</div><div class="delta">Target: 35% (needs attention)</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--accent3)">&euro;2.8M</div><div class="label">Avg Deal Size</div><div class="delta">Target: &euro;3.0M (93%)</div></div>
+  </div>
+
+  <div class="wide"><h3>GSI Partner Scorecard</h3></div>
+  <table class="tbl">
+    <thead><tr><th>GSI</th><th>Tier</th><th>Score</th><th>Revenue</th><th>Pipeline</th><th>Deals</th><th>Win Rate</th><th>Certified</th><th>Trend</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(59,130,246,0.04)"><td><strong>Deloitte</strong></td><td style="color:var(--amber);font-weight:700">Platinum</td><td>78</td><td>&euro;42M</td><td>&euro;68M</td><td>24</td><td>34%</td><td>28</td><td style="color:var(--green)">+15%</td></tr>
+      <tr><td><strong>Accenture</strong></td><td style="color:var(--text2);font-weight:700">Gold</td><td>65</td><td>&euro;28M</td><td>&euro;45M</td><td>18</td><td>28%</td><td>15</td><td style="color:var(--green)">+22%</td></tr>
+      <tr><td><strong>Capgemini</strong></td><td style="color:var(--text3);font-weight:700">Silver</td><td>52</td><td>&euro;15M</td><td>&euro;28M</td><td>12</td><td>22%</td><td>8</td><td style="color:var(--green)">+8%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="wide"><h3>Active Deal Pipeline (Top Deals by Value)</h3></div>
+  <table class="tbl">
+    <thead><tr><th>Deal</th><th>GSI</th><th>Region</th><th>Stage</th><th>Value</th><th>Forecast</th></tr></thead>
+    <tbody>
+      <tr><td>HSBC Customer Auth Upgrade Ph2</td><td>Deloitte</td><td>UK</td><td style="color:var(--green);font-weight:700">Closed-Won</td><td>&euro;5.5M</td><td>Closed</td></tr>
+      <tr><td>BNP Paribas CIAM Modernization</td><td>Deloitte</td><td>France</td><td>Proposal</td><td>&euro;4.2M</td><td>Commit</td></tr>
+      <tr><td>Standard Chartered APAC CIAM</td><td>Accenture</td><td>UK</td><td>Negotiation</td><td>&euro;4.1M</td><td>Commit</td></tr>
+      <tr><td>Barclays Digital Onboarding</td><td>Accenture</td><td>UK</td><td>Proposal</td><td>&euro;3.8M</td><td>Best Case</td></tr>
+      <tr><td>ING Digital Identity Platform</td><td>Deloitte</td><td>Benelux</td><td>Negotiation</td><td>&euro;3.1M</td><td>Commit</td></tr>
+      <tr><td>JPMorgan API Security Framework</td><td>Accenture</td><td>US</td><td>Qualified</td><td>&euro;2.5M</td><td>Upside</td></tr>
+      <tr><td>ABN AMRO Identity Refresh</td><td>Capgemini</td><td>Benelux</td><td>Qualified</td><td>&euro;2.3M</td><td>Upside</td></tr>
+      <tr><td>Commerzbank NHI Governance</td><td>Deloitte</td><td>DACH</td><td>Proposal</td><td>&euro;2.2M</td><td>Best Case</td></tr>
+      <tr><td>Credit Agricole Identity Hub</td><td>Accenture</td><td>France</td><td>Identified</td><td>&euro;2.1M</td><td>Pipeline</td></tr>
+      <tr><td>La Banque Postale CIAM</td><td>Capgemini</td><td>France</td><td>Proposal</td><td>&euro;1.9M</td><td>Best Case</td></tr>
+      <tr><td>Deutsche Bank NHI Discovery</td><td>Deloitte</td><td>DACH</td><td>Qualified</td><td>&euro;1.8M</td><td>Best Case</td></tr>
+      <tr><td>Emirates NBD Digital Identity</td><td>Deloitte</td><td>Middle East</td><td>Identified</td><td>&euro;1.5M</td><td>Pipeline</td></tr>
+    </tbody>
+  </table>
+
+  <div class="wide"><h3>Regional Pipeline Breakdown</h3></div>
+  <div class="chart-row">
+    <div class="chart-box"><h4>Pipeline by Region (&euro;M)</h4><canvas id="c_region_pipe"></canvas></div>
+    <div class="chart-box"><h4>Investment Scenario Modeling</h4><canvas id="c_invest_scenario"></canvas></div>
+  </div>
+
+  <table class="tbl">
+    <thead><tr><th>Region</th><th>Pipeline</th><th>Deals</th><th>Key Accounts</th><th>Regulation</th><th>Growth</th></tr></thead>
+    <tbody>
+      <tr><td><strong>France</strong></td><td>&euro;32M</td><td>15</td><td>BNP Paribas, SocGen, Credit Agricole, La Banque Postale</td><td>DORA + NIS2</td><td style="color:var(--green)">+14%</td></tr>
+      <tr><td><strong>UK</strong></td><td>&euro;28M</td><td>13</td><td>HSBC, Barclays, Lloyds, Standard Chartered</td><td>FCA Consumer Duty</td><td style="color:var(--green)">+16%</td></tr>
+      <tr><td><strong>Benelux</strong></td><td>&euro;22M</td><td>11</td><td>ING, ABN AMRO, Rabobank, KBC</td><td>DORA + DNB</td><td style="color:var(--green)">+11%</td></tr>
+      <tr><td><strong>DACH</strong></td><td>&euro;18M</td><td>8</td><td>Deutsche Bank, Commerzbank, Swiss Re, Zurich</td><td>DORA + BaFin</td><td style="color:var(--green)">+19%</td></tr>
+      <tr><td><strong>US</strong></td><td>&euro;15M</td><td>6</td><td>JPMorgan, Citi, Wells Fargo, Goldman Sachs</td><td>SEC Cyber + NYDFS</td><td style="color:var(--green)">+28%</td></tr>
+      <tr><td><strong>Middle East</strong></td><td>&euro;8M</td><td>4</td><td>Emirates NBD, QNB, Saudi National Bank</td><td>CBUAE + SAMA</td><td style="color:var(--green)">+45%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="wide"><h3>Investment Scenarios</h3></div>
+  <table class="tbl">
+    <thead><tr><th>Scenario</th><th>Investment</th><th>Headcount</th><th>Pipeline Target</th><th>Revenue Target</th><th>ROI</th><th>Timeline</th></tr></thead>
+    <tbody>
+      <tr><td style="color:var(--text3)"><strong>Low</strong></td><td>&euro;500K</td><td>2</td><td>&euro;20M</td><td>&euro;8M</td><td>16x</td><td>6 months</td></tr>
+      <tr style="background:rgba(59,130,246,0.04)"><td style="color:var(--accent)"><strong>Medium (Recommended)</strong></td><td>&euro;1.2M</td><td>5</td><td>&euro;55M</td><td>&euro;22M</td><td>18x</td><td>12 months</td></tr>
+      <tr><td style="color:var(--green)"><strong>High</strong></td><td>&euro;2.5M</td><td>10</td><td>&euro;120M</td><td>&euro;48M</td><td>19x</td><td>18 months</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
 <!-- EUROPEAN OPPORTUNITIES -->
 <!-- ═══════════════════════════════════════════════════════════ -->
 <div class="section" id="europe">
@@ -1841,7 +1983,45 @@ function init() {
   });
 }
 
-// Gartner Security Spend
+// IAA Market Segments
+  new Chart(document.getElementById('c_iaa_seg'), {
+    type:'doughnut', data:{
+      labels:['Authentication ($15.8B)','IDaaS ($12.3B)','IGA ($10.1B)','PAM ($5.0B)','On-Prem IAM ($2.8B)'],
+      datasets:[{data:[15.8,12.3,10.1,5.0,2.8],backgroundColor:['#3b82f6','#8b5cf6','#06b6d4','#10b981','#64748b'],borderWidth:0}]
+    }, options:{responsive:true,plugins:{legend:{position:'right'}}}
+  });
+
+  // IAA Market Share
+  new Chart(document.getElementById('c_iaa_share'), {
+    type:'bar', data:{
+      labels:['Okta','Microsoft','CyberArk','SailPoint','Ping','OpenText','IBM','Cisco','Thales','BeyondTrust'],
+      datasets:[
+        {label:'1H24',data:[6.41,3.00,2.29,1.80,2.10,1.96,1.74,1.52,1.15,1.03],backgroundColor:'rgba(148,163,184,0.3)',borderRadius:3},
+        {label:'1H25',data:[5.98,2.81,2.75,2.07,1.86,1.67,1.58,1.26,1.03,0.94],backgroundColor:(ctx)=>ctx.dataIndex===8?'rgba(245,158,11,0.7)':'rgba(59,130,246,0.6)',borderRadius:3}
+      ]
+    }, options:{responsive:true,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:true,max:7,grid:{color:'#1e293b'}},x:{grid:{display:false}}}}
+  });
+
+  // Regional Pipeline
+  new Chart(document.getElementById('c_region_pipe'), {
+    type:'bar', data:{
+      labels:['France','UK','Benelux','DACH','US','Middle East'],
+      datasets:[{label:'Pipeline (€M)',data:[32,28,22,18,15,8],backgroundColor:['#3b82f6','#8b5cf6','#06b6d4','#10b981','#f59e0b','#ef4444'],borderRadius:5}]
+    }, options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#1e293b'}},x:{grid:{display:false}}}}
+  });
+
+  // Investment Scenarios
+  new Chart(document.getElementById('c_invest_scenario'), {
+    type:'bar', data:{
+      labels:['Low (€500K)','Medium (€1.2M)','High (€2.5M)'],
+      datasets:[
+        {label:'Pipeline (€M)',data:[20,55,120],backgroundColor:'rgba(59,130,246,0.6)',borderRadius:5},
+        {label:'Revenue (€M)',data:[8,22,48],backgroundColor:'rgba(16,185,129,0.6)',borderRadius:5}
+      ]
+    }, options:{responsive:true,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:true,grid:{color:'#1e293b'}},x:{grid:{display:false}}}}
+  });
+
+  // Gartner Security Spend
   new Chart(document.getElementById('c_gartner_spend'), {
     type:'bar', data:{
       labels:['2022','2023','2024','2025E','2026E','2027E','2028E'],
