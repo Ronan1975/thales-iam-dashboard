@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic AI &times; IAM &mdash; Thales OneWelcome Strategic Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --surface2: #1a2235;
+  --surface3: #1e293b;
+  --border: #1e293b;
+  --accent: #3b82f6;
+  --accent2: #8b5cf6;
+  --accent3: #06b6d4;
+  --green: #10b981;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ─── HEADER ─── */
+.header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #0f172a 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 32px 48px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -100px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%);
+}
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -200px; left: 20%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%);
+}
+.header-top { display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1; }
+.header h1 {
+  font-size: 26px; font-weight: 700; letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.header .subtitle { color: var(--text2); font-size: 14px; margin-top: 4px; }
+.badge-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+}
+.badge-blue { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.25); }
+.badge-purple { background: rgba(139,92,246,0.12); color: #a78bfa; border: 1px solid rgba(139,92,246,0.25); }
+.badge-cyan { background: rgba(6,182,212,0.12); color: #22d3ee; border: 1px solid rgba(6,182,212,0.25); }
+.badge-amber { background: rgba(245,158,11,0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
+.badge-green { background: rgba(16,185,129,0.12); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+.thales-logo { text-align: right; }
+.thales-logo .company { font-size: 22px; font-weight: 700; color: #fff; letter-spacing: 2px; }
+.thales-logo .division { font-size: 12px; color: var(--accent3); font-weight: 500; }
+.thales-logo .date { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+/* ─── NAV ─── */
+.nav-tabs {
+  display: flex; gap: 2px; padding: 10px 48px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+}
+.nav-tab {
+  padding: 7px 16px; border-radius: 7px;
+  font-size: 12px; font-weight: 600; color: var(--text3);
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  border: 1px solid transparent; user-select: none;
+}
+.nav-tab:hover { color: var(--text); background: var(--surface2); }
+.nav-tab.active { color: var(--accent); background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.3); }
+
+/* ─── SECTIONS ─── */
+.section { display: none; padding: 28px 48px 48px; max-width: 1440px; margin: 0 auto; }
+.section.active { display: block; }
+.section-title {
+  font-size: 20px; font-weight: 700; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-title .icon { font-size: 22px; }
+.section-subtitle { font-size: 13px; color: var(--text2); margin: -12px 0 24px 32px; }
+
+/* ─── CARD SYSTEM ─── */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-bottom: 28px; }
+.card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px;
+  transition: border-color 0.2s, transform 0.15s;
+}
+.card:hover { border-color: rgba(59,130,246,0.25); transform: translateY(-1px); }
+.card h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: #fff; }
+.card p { font-size: 12.5px; color: var(--text2); line-height: 1.7; }
+.card .tag {
+  display: inline-block; padding: 2px 8px; border-radius: 4px;
+  font-size: 10px; font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* ─── STAT CARDS ─── */
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px; text-align: center;
+}
+.stat-card .val { font-size: 28px; font-weight: 800; color: #fff; }
+.stat-card .label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px; }
+.stat-card .delta { font-size: 11px; margin-top: 4px; font-weight: 600; }
+.up { color: var(--green); }
+.dn { color: var(--red); }
+
+/* ─── CHARTS ─── */
+.chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+.chart-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px;
+}
+.chart-box h4 { font-size: 13px; font-weight: 700; margin-bottom: 14px; color: var(--text); }
+.chart-box canvas { max-height: 260px; }
+
+/* ─── WIDE CARD ─── */
+.wide {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px; margin-bottom: 20px;
+}
+.wide h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: #fff; }
+.wide p { font-size: 12.5px; color: var(--text2); line-height: 1.8; }
+.wide ul { list-style: none; margin-top: 10px; }
+.wide li { font-size: 12.5px; color: var(--text2); padding: 3px 0 3px 18px; position: relative; }
+.wide li::before { content: '\2192'; position: absolute; left: 0; color: var(--accent); font-size: 12px; }
+
+.highlight {
+  background: linear-gradient(135deg, rgba(59,130,246,0.06), rgba(139,92,246,0.06));
+  border: 1px solid rgba(59,130,246,0.15); border-radius: var(--radius);
+  padding: 16px 20px; margin: 14px 0;
+}
+.highlight p { font-size: 13px; color: var(--text); }
+
+/* ─── TABLE ─── */
+.tbl { width: 100%; border-collapse: collapse; margin-bottom: 28px; font-size: 12.5px; }
+.tbl th {
+  text-align: left; padding: 10px 14px;
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px;
+  color: var(--text3); border-bottom: 1px solid var(--border); background: var(--surface);
+}
+.tbl td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--text2); }
+.tbl tr:hover td { background: rgba(59,130,246,0.02); }
+
+/* ─── SWOT ─── */
+.matrix { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; }
+.mcell { background: var(--surface); border-radius: var(--radius); padding: 22px; border: 1px solid var(--border); }
+.mcell h4 { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+.mcell ul { list-style: none; }
+.mcell li { font-size: 12px; color: var(--text2); padding: 5px 0 5px 14px; position: relative; }
+.mcell li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; }
+.ms h4 { color: var(--green); } .ms li::before { background: var(--green); }
+.mw h4 { color: var(--red); } .mw li::before { background: var(--red); }
+.mo h4 { color: var(--accent); } .mo li::before { background: var(--accent); }
+.mt h4 { color: var(--amber); } .mt li::before { background: var(--amber); }
+
+/* ─── TIMELINE ─── */
+.timeline { position: relative; padding-left: 28px; margin-bottom: 28px; }
+.timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+.tl-item { position: relative; margin-bottom: 22px; }
+.tl-item::before {
+  content: ''; position: absolute; left: -25px; top: 5px;
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 2px solid var(--accent); background: var(--bg);
+}
+.tl-item.done::before { background: var(--green); border-color: var(--green); }
+.tl-item.now::before { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 8px rgba(59,130,246,0.5); }
+.tl-item h4 { font-size: 13px; font-weight: 700; color: #fff; }
+.tl-item .date { font-size: 11px; color: var(--text3); }
+.tl-item p { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+/* ─── FLOW ─── */
+.flow { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
+.fn {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 18px; text-align: center; min-width: 130px;
+}
+.fn .ft { font-size: 11px; font-weight: 700; color: #fff; }
+.fn .fs { font-size: 10px; color: var(--text3); margin-top: 2px; }
+.fa { font-size: 18px; color: var(--accent); }
+
+/* ─── PILLARS ─── */
+.pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+.pillar {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.pillar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.pb::before { background: var(--accent); }
+.pp::before { background: var(--accent2); }
+.pc::before { background: var(--accent3); }
+.pg::before { background: var(--green); }
+.pa::before { background: var(--amber); }
+.pillar .pi { font-size: 26px; margin-bottom: 10px; }
+.pillar h4 { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.pillar p { font-size: 11.5px; color: var(--text2); }
+
+/* ─── GSI PROFILE CARDS ─── */
+.gsi-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px; margin-bottom: 16px;
+  display: grid; grid-template-columns: 200px 1fr; gap: 20px;
+  transition: border-color 0.2s;
+}
+.gsi-card:hover { border-color: rgba(59,130,246,0.3); }
+.gsi-left { border-right: 1px solid var(--border); padding-right: 20px; }
+.gsi-left h3 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.gsi-left .gsi-rev { font-size: 22px; font-weight: 800; color: var(--accent); }
+.gsi-left .gsi-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.gsi-left .gsi-priority {
+  display: inline-block; margin-top: 10px; padding: 3px 10px;
+  border-radius: 4px; font-size: 11px; font-weight: 700;
+}
+.p1 { background: rgba(16,185,129,0.15); color: var(--green); }
+.p2 { background: rgba(245,158,11,0.15); color: var(--amber); }
+.gsi-right { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.gsi-detail h5 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text3); margin-bottom: 4px; }
+.gsi-detail p { font-size: 12px; color: var(--text2); line-height: 1.6; }
+
+/* ─── ACCORDION ─── */
+.accordion { margin-bottom: 28px; }
+.acc-item { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; }
+.acc-header {
+  background: var(--surface); padding: 14px 20px;
+  cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; font-weight: 700; color: #fff; user-select: none;
+  transition: background 0.2s;
+}
+.acc-header:hover { background: var(--surface2); }
+.acc-header .arr { transition: transform 0.3s; font-size: 14px; color: var(--text3); }
+.acc-item.open .acc-header .arr { transform: rotate(180deg); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: var(--surface); }
+.acc-body-inner { padding: 0 20px 18px; font-size: 12.5px; color: var(--text2); line-height: 1.7; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1024px) {
+  .header { padding: 24px; }
+  .nav-tabs { padding: 10px 24px; }
+  .section { padding: 24px; }
+  .card-grid, .card-grid-3, .chart-row, .matrix, .pillars { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .gsi-card { grid-template-columns: 1fr; }
+  .gsi-left { border-right: none; border-bottom: 1px solid var(--border); padding-right: 0; padding-bottom: 14px; }
+}
+@media (max-width: 600px) {
+  .stat-grid { grid-template-columns: 1fr; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>Agentic AI &times; IAM / Cybersecurity</h1>
+      <div class="subtitle">Strategic Product &amp; Market Intelligence Dashboard &mdash; Partner &amp; Competitive Analysis</div>
+      <div class="badge-row">
+        <span class="badge badge-blue">IAM</span>
+        <span class="badge badge-purple">Agentic AI</span>
+        <span class="badge badge-cyan">CIAM</span>
+        <span class="badge badge-amber">Cybersecurity</span>
+        <span class="badge badge-green">GSI Partners</span>
+      </div>
+    </div>
+    <div class="thales-logo">
+      <div class="company">THALES</div>
+      <div class="division">OneWelcome &middot; Identity Platform</div>
+      <div class="date">Q2 2026 &middot; Confidential</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ NAV ═══════════ -->
+<div class="nav-tabs">
+  <div class="nav-tab active" data-tab="overview">Executive Summary</div>
+  <div class="nav-tab" data-tab="market">Market Intelligence</div>
+  <div class="nav-tab" data-tab="agentic">Agentic AI Story</div>
+  <div class="nav-tab" data-tab="gsi-transform">GSI Transformation</div>
+  <div class="nav-tab" data-tab="gsi-profiles">GSI Profiles &amp; Intel</div>
+  <div class="nav-tab" data-tab="gsi-playbook">GSI Playbook</div>
+  <div class="nav-tab" data-tab="product">Product Landscape</div>
+  <div class="nav-tab" data-tab="competitive">Competitive Position</div>
+  <div class="nav-tab" data-tab="messaging">Messaging &amp; Differentiators</div>
+  <div class="nav-tab" data-tab="mythos">Mythos Impact</div>
+  <div class="nav-tab" data-tab="roadmap">Strategic Roadmap</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- EXECUTIVE SUMMARY -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section active" id="overview">
+  <div class="section-title"><span class="icon">&#9670;</span> Executive Summary</div>
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="val" style="color:var(--accent)">$28.7B</div><div class="label">Global IAM Market 2026</div><div class="delta up">+13.2% YoY</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--accent2)">$8.1B</div><div class="label">CIAM Segment 2026</div><div class="delta up">+18.4% YoY</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--accent3)">$62B</div><div class="label">AI Cybersecurity Spend</div><div class="delta up">+24.3% YoY</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--green)">$12.8B</div><div class="label">GSI GenAI Bookings (Top 5)</div><div class="delta up">+112% YoY</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--amber)">3,200+</div><div class="label">Identity Attacks/Day (Avg)</div><div class="delta dn">+47% vs 2025</div></div>
+  </div>
+
+  <div class="wide">
+    <h3>The Thesis</h3>
+    <p>Identity is the new perimeter. As AI agents proliferate, every agent becomes an identity that must be authenticated, authorized, and audited. The companies that control the identity layer for both human and machine actors will own the security architecture of the AI era.</p>
+    <div class="highlight" style="margin-top:14px">
+      <p><strong>Thales OneWelcome sits at the exact intersection:</strong> an established CIAM platform with enterprise credibility, regulatory compliance (GDPR, NIS2, DORA), and the trust infrastructure needed to become the identity backbone for agentic AI workloads. The GSI channel is the force multiplier &mdash; and GSIs are restructuring around AI at unprecedented speed.</p>
+    </div>
+  </div>
+
+  <div class="pillars">
+    <div class="pillar pb"><div class="pi">&#128274;</div><h4>Identity-First Security</h4><p>Zero Trust starts with identity. Every access decision flows through IAM. CIAM extends this to external-facing apps and AI agents.</p></div>
+    <div class="pillar pp"><div class="pi">&#129302;</div><h4>Agentic AI Governance</h4><p>Autonomous AI agents need verifiable identities, scoped permissions, and auditable actions. A new category IAM is uniquely positioned to serve.</p></div>
+    <div class="pillar pc"><div class="pi">&#128200;</div><h4>GSI Channel Acceleration</h4><p>GSIs are investing $10B+ in AI capabilities. Identity is the connective tissue in every AI-security engagement. The co-sell window is now.</p></div>
+  </div>
+
+  <div class="chart-row">
+    <div class="chart-box"><h4>IAM Market Growth (2022&ndash;2028E)</h4><canvas id="c_iam"></canvas></div>
+    <div class="chart-box"><h4>Identity Attack Vector Distribution (2026)</h4><canvas id="c_attack"></canvas></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- MARKET INTELLIGENCE -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section" id="market">
+  <div class="section-title"><span class="icon">&#128202;</span> Market Intelligence</div>
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="val" style="color:var(--accent)">78%</div><div class="label">CISOs: Identity is #1 Risk</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--accent2)">45:1</div><div class="label">Machine vs Human Identities</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--amber)">$4.88M</div><div class="label">Avg Identity Breach Cost</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--green)">92%</div><div class="label">Enterprises on Zero Trust</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--red)">340%</div><div class="label">AI Credential Stuffing Rise</div></div>
+  </div>
+
+  <div class="chart-row">
+    <div class="chart-box"><h4>CIAM Spend by Industry Vertical</h4><canvas id="c_vertical"></canvas></div>
+    <div class="chart-box"><h4>Regulatory Compliance Driver Intensity</h4><canvas id="c_reg"></canvas></div>
+  </div>
+
+  <div class="wide">
+    <h3>Key Market Dynamics</h3>
+    <ul>
+      <li><strong>Identity-first security</strong> has replaced network-perimeter as the dominant enterprise architecture</li>
+      <li><strong>Machine identities</strong> outnumber human identities 45:1 and growing &mdash; each AI agent adds to the count</li>
+      <li><strong>AI-powered credential attacks</strong> surged 340% since GPT-4 class models became widely available</li>
+      <li><strong>EU regulatory pressure</strong> (NIS2, DORA, EU AI Act) is creating mandatory IAM spend across all sectors</li>
+      <li><strong>Identity security market</strong> projected to grow from $29B (2025) to $56B (2029) per IDC</li>
+      <li><strong>Cybersecurity AI budgets</strong> set to quintuple: from 9% to 48% of cyber spend within two years (EY, March 2026)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- AGENTIC AI STORY -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section" id="agentic">
+  <div class="section-title"><span class="icon">&#129302;</span> The Agentic AI &times; Identity Story</div>
+
+  <div class="wide">
+    <h3>Why Agentic AI Changes Everything for IAM</h3>
+    <p>We are entering the era of <strong>autonomous software agents</strong> &mdash; AI systems that take actions: booking meetings, executing trades, managing infrastructure, serving customers. Each agent is an identity. Each action is an access decision. The entire IAM category is being redefined.</p>
+  </div>
+
+  <div class="flow">
+    <div class="fn" style="border-color:var(--accent)"><div class="ft">AI Agent Created</div><div class="fs">LLM + Tools + Goal</div></div>
+    <div class="fa">&rarr;</div>
+    <div class="fn" style="border-color:var(--accent2)"><div class="ft">Identity Assigned</div><div class="fs">Machine ID / mTLS</div></div>
+    <div class="fa">&rarr;</div>
+    <div class="fn" style="border-color:var(--accent3)"><div class="ft">Scoped Permissions</div><div class="fs">RBAC / ABAC / JIT</div></div>
+    <div class="fa">&rarr;</div>
+    <div class="fn" style="border-color:var(--green)"><div class="ft">Action Executed</div><div class="fs">API / Data Access</div></div>
+    <div class="fa">&rarr;</div>
+    <div class="fn" style="border-color:var(--amber)"><div class="ft">Audit Trail</div><div class="fs">Lineage + Compliance</div></div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card"><div class="tag" style="background:rgba(59,130,246,0.12);color:#60a5fa">New Category</div><h3>Agent Identity Management (AIM)</h3><p>Every AI agent needs a verifiable identity with scoped permissions, session management, and revocation. Workforce IAM for non-human actors &mdash; barely existed 18 months ago, now critical infrastructure.</p></div>
+    <div class="card"><div class="tag" style="background:rgba(139,92,246,0.12);color:#a78bfa">Architecture</div><h3>Consent-Aware AI Interactions</h3><p>When AI agents interact with customers on behalf of a brand, CIAM must verify both the agent&rsquo;s authority and the customer&rsquo;s consent. A new consent layer OneWelcome can own.</p></div>
+    <div class="card"><div class="tag" style="background:rgba(6,182,212,0.12);color:#22d3ee">Threat Surface</div><h3>Agent Impersonation Attacks</h3><p>Adversaries will create rogue agents impersonating corporate AI. Identity verification for agents becomes as critical as TLS certificates were for websites.</p></div>
+    <div class="card"><div class="tag" style="background:rgba(16,185,129,0.12);color:#34d399">Revenue</div><h3>Per-Agent Licensing</h3><p>Agent identities create a new billing axis. Where CIAM charged per user, the next wave charges per agent per action class. Thousands of agents per enterprise = massive ARPA expansion.</p></div>
+    <div class="card"><div class="tag" style="background:rgba(245,158,11,0.12);color:#fbbf24">Compliance</div><h3>EU AI Act &times; Identity</h3><p>EU AI Act requires traceability and human oversight for high-risk AI. Identity infrastructure provides the foundation: who deployed the agent, what it can do, what it did, who&rsquo;s accountable.</p></div>
+    <div class="card"><div class="tag" style="background:rgba(239,68,68,0.12);color:#f87171">Unsolved</div><h3>Delegation Chains</h3><p>Agent A calls Agent B calls Agent C &mdash; each with different permissions. Transitive trust across multi-agent systems is an unsolved identity problem and a greenfield opportunity.</p></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- GSI TRANSFORMATION -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section" id="gsi-transform">
+  <div class="section-title"><span class="icon">&#128640;</span> How GSIs Are Transforming in the AI Era</div>
+  <div class="section-subtitle">The consulting industry is undergoing its largest structural shift since cloud. Every GSI is rebuilding around AI &mdash; creating massive partner opportunities.</div>
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="val" style="color:var(--accent)">$10B+</div><div class="label">Combined GSI AI Investment</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--accent2)">77K</div><div class="label">Accenture AI Hires (2025)</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--accent3)">72%</div><div class="label">McKinsey Staff Using AI Daily</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--green)">$5.9B</div><div class="label">Accenture GenAI Bookings FY25</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--amber)">40%</div><div class="label">McKinsey Projects with AI</div></div>
+  </div>
+
+  <!-- Structural Shifts -->
+  <div class="wide">
+    <h3>Five Structural Shifts Reshaping GSIs</h3>
+  </div>
+
+  <div class="card-grid card-grid-3">
+    <div class="card" style="border-top: 3px solid var(--accent)">
+      <h3>1. Pricing Model Collapse</h3>
+      <p>GenAI can reduce an 8-hour coding task to 2 hours, making hourly billing untenable. GSIs are pivoting to <strong>outcome-based</strong> and <strong>subscription pricing</strong>. PwC One (launched March 2026) uses consumption-based pricing. This changes how technology partners get embedded in deals.</p>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--accent2)">
+      <h3>2. New Practice Areas Emerging</h3>
+      <p><strong>Data preparation for AI</strong> ($400B market in 2024, projected $2.2T by 2034), <strong>AI governance</strong>, <strong>responsible AI</strong>, and <strong>agentic AI orchestration</strong> are all net-new practice areas. Identity is foundational infrastructure for all of them.</p>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--accent3)">
+      <h3>3. Pyramid Model Under Pressure</h3>
+      <p>AI tools can perform 80% of a junior analyst&rsquo;s research and slide generation. Starting salaries frozen at top consultancies. The traditional leverage model is being replaced by smaller teams with AI augmentation. <strong>Technology partnerships matter more than headcount.</strong></p>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--green)">
+      <h3>4. AI-First Delivery Platforms</h3>
+      <p>Every major GSI now has an internal AI platform: McKinsey&rsquo;s <strong>Lilli</strong>, PwC&rsquo;s <strong>PwC One</strong>, EY&rsquo;s <strong>EYQ</strong>, Deloitte&rsquo;s <strong>Ascend/Zora</strong>. These platforms are becoming client-facing &mdash; creating new partnership surfaces for technology vendors.</p>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--amber)">
+      <h3>5. Cybersecurity &times; AI Convergence</h3>
+      <p>Every GSI is building dedicated AI-cybersecurity practices. Accenture launched <strong>Cyber.AI</strong> with Anthropic. Deloitte published <strong>Cyber AI Blueprints</strong> for agentic AI. Capgemini declared cybersecurity must become <strong>&ldquo;identity-first in an AI-first world.&rdquo;</strong> This is the exact whitespace for Thales.</p>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--red)">
+      <h3>6. Headcount Divergence</h3>
+      <p>Deloitte: <strong>+10K net</strong>. Accenture: restructured (laid off 11K, hired 77K AI/data). PwC: <strong>-5,600</strong>. The firms growing are growing in AI. The firms shrinking are shedding traditional roles. <strong>Where you sit in a GSI&rsquo;s AI stack determines your relevance.</strong></p>
+    </div>
+  </div>
+
+  <!-- Internal AI Tools -->
+  <div class="wide">
+    <h3>GSI Internal AI Platforms &mdash; The New Battleground</h3>
+    <p>Each GSI has built proprietary AI platforms that are now becoming client-facing. For Thales, these represent integration surfaces and co-sell entry points.</p>
+  </div>
+
+  <table class="tbl">
+    <thead><tr><th>Firm</th><th>Platform</th><th>Capability</th><th>Adoption</th><th>Thales Angle</th></tr></thead>
+    <tbody>
+      <tr><td><strong>McKinsey</strong></td><td>Lilli + Wave</td><td>Research, slide decks, proposals, expert matching, program dashboards</td><td>72% of 45K staff</td><td>Identity governance for AI-assisted advisory outputs</td></tr>
+      <tr><td><strong>PwC</strong></td><td>PwC One</td><td>Autonomous agents do work, humans review. Multi-vendor AI (Microsoft, Google, AWS, OpenAI, Anthropic)</td><td>US launch Mar 2026</td><td>Agent identity for PwC One&rsquo;s autonomous agents</td></tr>
+      <tr><td><strong>Deloitte</strong></td><td>Ascend + Zora</td><td>Enterprise AI Navigator, delivery acceleration agents</td><td>Growing firmwide</td><td>Cyber AI Blueprint integration for identity workloads</td></tr>
+      <tr><td><strong>EY</strong></td><td>EY.ai / EYQ</td><td>Private LLM, audit AI, sector analytics</td><td>92M prompts logged</td><td>Identity controls for AI-powered audit pipelines</td></tr>
+      <tr><td><strong>Accenture</strong></td><td>AI Navigator</td><td>Business case, architecture, responsible AI compliance tooling</td><td>Client-facing</td><td>CIAM layer for client-facing AI interactions</td></tr>
+      <tr><td><strong>Capgemini</strong></td><td>Research-led</td><td>Cybersecurity imperatives, EU sovereign cloud</td><td>71 EU agencies served</td><td>Sovereign identity for EU government AI deployments</td></tr>
+    </tbody>
+  </table>
+
+  <div class="chart-row">
+    <div class="chart-box"><h4>GSI AI Investment Scale ($B)</h4><canvas id="c_gsi_invest"></canvas></div>
+    <div class="chart-box"><h4>GSI AI Revenue / Bookings Trajectory</h4><canvas id="c_gsi_revenue"></canvas></div>
+  </div>
+
+  <div class="highlight">
+    <p><strong>Key Insight for Thales:</strong> The GSI that wins the AI-security practice race will default to whatever identity platform they standardize on. The window to become that default is Q2&ndash;Q4 2026. After that, partnerships ossify into reference architectures that last 3&ndash;5 years.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- GSI PROFILES -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section" id="gsi-profiles">
+  <div class="section-title"><span class="icon">&#128200;</span> GSI Profiles &amp; Intelligence</div>
+  <div class="section-subtitle">Deep profiles on each priority GSI partner with specific co-sell angles and intelligence</div>
+
+  <!-- DELOITTE -->
+  <div class="gsi-card">
+    <div class="gsi-left">
+      <h3>Deloitte</h3>
+      <div class="gsi-rev">$70.5B</div>
+      <div class="gsi-sub">FY2025 Revenue &middot; 470K employees</div>
+      <div class="gsi-priority p1">P1 &mdash; Priority Target</div>
+    </div>
+    <div class="gsi-right">
+      <div class="gsi-detail"><h5>AI Investment</h5><p>$3B through 2030. Enterprise AI Navigator on Ascend platform. Zora AI agents for delivery. AI budget rising from 8% to 13% of tech spend.</p></div>
+      <div class="gsi-detail"><h5>Cyber + Identity</h5><p><strong>Cyber AI Blueprints</strong> launched for agentic AI era. Dedicated <strong>Cyber Identity Leader</strong> (Anthony Berg). Partnerships with Google Cloud + Rubrik for cyber resilience.</p></div>
+      <div class="gsi-detail"><h5>Co-Sell Angle</h5><p>Integrate OneWelcome into Deloitte&rsquo;s Cyber AI Blueprints as the identity layer. NIS2/DORA compliance packages bundled with CIAM implementation.</p></div>
+      <div class="gsi-detail"><h5>Entry Point</h5><p>Anthony Berg&rsquo;s Cyber Identity practice. Position: GenAI and agentic AI will distinguish top IAM integrators in 2026 &mdash; Deloitte needs a CIAM platform partner.</p></div>
+    </div>
+  </div>
+
+  <!-- ACCENTURE -->
+  <div class="gsi-card">
+    <div class="gsi-left">
+      <h3>Accenture</h3>
+      <div class="gsi-rev">~$70B</div>
+      <div class="gsi-sub">FY2025 &middot; $80.6B bookings &middot; 77K AI hires</div>
+      <div class="gsi-priority p1">P1 &mdash; Priority Target</div>
+    </div>
+    <div class="gsi-right">
+      <div class="gsi-detail"><h5>AI Scale</h5><p>GenAI revenue: <strong>$2.7B</strong> (tripled YoY). Bookings: <strong>$5.9B</strong>. 129 quarterly clients at $100M+. AI now integrated across all engagements &mdash; no longer reported separately.</p></div>
+      <div class="gsi-detail"><h5>Cyber + Identity</h5><p><strong>Cyber.AI</strong> launched March 2026 &mdash; powered by Anthropic&rsquo;s Claude. CrowdStrike partnership for identity protection + next-gen SIEM. CTO pushing unified digital identity + threat intelligence.</p></div>
+      <div class="gsi-detail"><h5>Co-Sell Angle</h5><p>Position OneWelcome as the CIAM complement to Accenture Cyber.AI. Their Claude-powered agent library needs enterprise identity governance. Customer-facing AI interactions need consent management.</p></div>
+      <div class="gsi-detail"><h5>Key Intelligence</h5><p>Accenture&rsquo;s CrowdStrike deal focused on cloud + identity protection. SGNL (acquired by CrowdStrike Jan 2026) extends identity to Okta/AWS IAM &mdash; this is the competitive counter-narrative.</p></div>
+    </div>
+  </div>
+
+  <!-- CAPGEMINI -->
+  <div class="gsi-card">
+    <div class="gsi-left">
+      <h3>Capgemini</h3>
+      <div class="gsi-rev">EU Leader</div>
+      <div class="gsi-sub">71 EU agencies &middot; Identity-first mandate</div>
+      <div class="gsi-priority p1">P1 &mdash; Priority Target</div>
+    </div>
+    <div class="gsi-right">
+      <div class="gsi-detail"><h5>AI Trajectory</h5><p>GenAI adoption: 6% (2023) to 30% (2025) in their client base. 14% of orgs running AI agents at scale. Five cybersecurity imperatives published for 2026.</p></div>
+      <div class="gsi-detail"><h5>Cyber + Identity</h5><p>Won <strong>EU MC17 FREIA</strong> cyber framework contract &mdash; serving 71 European institutions. Published imperative: cybersecurity must become <strong>&ldquo;identity-first in an AI-first world.&rdquo;</strong></p></div>
+      <div class="gsi-detail"><h5>Co-Sell Angle</h5><p>European sovereign identity for government AI deployments. Thales&rsquo;s defence-grade heritage + OneWelcome CIAM = the identity platform for EU institutions under the FREIA framework.</p></div>
+      <div class="gsi-detail"><h5>Strategic Fit</h5><p>Capgemini&rsquo;s European DNA aligns perfectly with Thales. Their &ldquo;identity-first&rdquo; language is essentially describing what OneWelcome does. Easiest narrative alignment of any GSI.</p></div>
+    </div>
+  </div>
+
+  <!-- PwC -->
+  <div class="gsi-card">
+    <div class="gsi-left">
+      <h3>PwC</h3>
+      <div class="gsi-rev">$56.9B</div>
+      <div class="gsi-sub">FY2025 &middot; 364K (-5,600) employees</div>
+      <div class="gsi-priority p2">P2 &mdash; Strategic Target</div>
+    </div>
+    <div class="gsi-right">
+      <div class="gsi-detail"><h5>PwC One Platform</h5><p>Launched March 2026. AI agents do primary work, humans review. Multi-vendor AI (Microsoft, Google, AWS, OpenAI, Anthropic). Consumption-based pricing &mdash; most aggressive Big4 AI move.</p></div>
+      <div class="gsi-detail"><h5>Opportunity</h5><p>PwC One&rsquo;s autonomous agents need identity governance. <strong>88% of executives</strong> in PwC survey plan to increase AI budgets. Agent identity management is a natural fit for PwC&rsquo;s &ldquo;audit-grade rigor&rdquo; positioning.</p></div>
+    </div>
+  </div>
+
+  <!-- EY -->
+  <div class="gsi-card">
+    <div class="gsi-left">
+      <h3>EY</h3>
+      <div class="gsi-rev">$2.4B+</div>
+      <div class="gsi-sub">AI investment &middot; 92M EYQ prompts</div>
+      <div class="gsi-priority p2">P2 &mdash; Strategic Target</div>
+    </div>
+    <div class="gsi-right">
+      <div class="gsi-detail"><h5>AI + Cyber Focus</h5><p>AI revenue +30% YoY. March 2026 study: orgs spending 25%+ of cyber budget on AI will <strong>quintuple from 9% to 48%</strong> in two years. 99% of security leaders say AI will transform cybersecurity.</p></div>
+      <div class="gsi-detail"><h5>Opportunity</h5><p>EY&rsquo;s cyber AI spending projections are a demand signal. Their audit AI pipeline (EYQ, 92M prompts) needs identity controls. Financial services focus aligns with OneWelcome + DORA compliance.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- GSI PLAYBOOK -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section" id="gsi-playbook">
+  <div class="section-title"><span class="icon">&#129309;</span> GSI Partner Playbook</div>
+  <div class="section-subtitle">Actionable co-sell strategies, conversation openers, and deal structures</div>
+
+  <div class="card-grid">
+    <div class="card" style="border-left:3px solid var(--accent)">
+      <h3>Conversation Opener: The Agent Identity Gap</h3>
+      <p>&ldquo;Your clients are deploying AI agents at scale. Each agent needs an identity &mdash; authenticated, authorized, auditable. Right now there&rsquo;s no standard for this. We&rsquo;re building that layer. Let&rsquo;s co-create the reference architecture before your competitors do.&rdquo;</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent2)">
+      <h3>Conversation Opener: The Compliance Clock</h3>
+      <p>&ldquo;NIS2 is live. DORA is live. The EU AI Act is phasing in. Your clients need identity infrastructure that satisfies all three simultaneously. We&rsquo;re the only CIAM platform with defence-grade compliance heritage. Let&rsquo;s build the bundle together.&rdquo;</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent3)">
+      <h3>Conversation Opener: The AI Platform Risk</h3>
+      <p>&ldquo;Your PwC One / Cyber.AI / Ascend platform has autonomous agents taking actions on behalf of clients. Who governs those agent identities? What happens when an agent exceeds its scope? We solve that problem at the identity layer.&rdquo;</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--green)">
+      <h3>Conversation Opener: The Revenue Play</h3>
+      <p>&ldquo;Your pricing model is shifting to outcome-based. Identity management for AI agents creates a new per-agent, per-action billing axis for your clients. We can help you monetize the identity layer in every AI deployment.&rdquo;</p>
+    </div>
+  </div>
+
+  <div class="wide">
+    <h3>Co-Sell Deal Structures</h3>
+  </div>
+
+  <table class="tbl">
+    <thead><tr><th>Package</th><th>GSI Value</th><th>Thales Value</th><th>Avg Deal Size</th><th>Target Vertical</th></tr></thead>
+    <tbody>
+      <tr><td><strong>NIS2 + CIAM Compliance Bundle</strong></td><td>Advisory + implementation revenue (&euro;200K&ndash;&euro;800K per engagement)</td><td>Recurring CIAM license (&euro;300K&ndash;&euro;1.2M ARR)</td><td>&euro;500K&ndash;&euro;2M</td><td>Financial Services, Critical Infrastructure</td></tr>
+      <tr><td><strong>AI Governance Stack</strong></td><td>Framework design + agent orchestration consulting</td><td>Agent identity management + consent layer</td><td>&euro;1M&ndash;&euro;5M</td><td>Enterprise AI deployments</td></tr>
+      <tr><td><strong>DORA Identity Package</strong></td><td>Regulatory gap assessment + remediation plan</td><td>Identity resilience + MFA + access governance</td><td>&euro;300K&ndash;&euro;1.5M</td><td>Banking, Insurance</td></tr>
+      <tr><td><strong>Sovereign Identity for EU</strong></td><td>EU institution deployment + managed service</td><td>CIAM + consent for government digital services</td><td>&euro;2M&ndash;&euro;10M</td><td>Government, EU Institutions</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card-grid">
+    <div class="card">
+      <h3>Enablement: GSI Certification Program</h3>
+      <p>Create <strong>&ldquo;OneWelcome AI Identity Certified&rdquo;</strong> for GSI consultants. Target: 50 certified consultants by Q4 2026, 200+ by Q4 2027. Drives mindshare, creates internal champions, embeds OneWelcome into GSI delivery methodology.</p>
+    </div>
+    <div class="card">
+      <h3>Joint IP: Reference Architectures</h3>
+      <p>Co-develop reference architectures with each P1 GSI: <strong>&ldquo;Agent Identity for Enterprise AI&rdquo;</strong> (Deloitte), <strong>&ldquo;CIAM for AI-Powered CX&rdquo;</strong> (Accenture), <strong>&ldquo;Sovereign Identity for EU Cloud&rdquo;</strong> (Capgemini). Joint IP = sticky partnerships.</p>
+    </div>
+    <div class="card">
+      <h3>Demand Generation: Threat Intelligence</h3>
+      <p>Quarterly <strong>&ldquo;AI Identity Threat Report&rdquo;</strong> co-branded with GSI partners. Creates urgency, positions Thales as thought leader, gives GSI consultants a reason to bring OneWelcome into every security conversation.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- PRODUCT LANDSCAPE -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section" id="product">
+  <div class="section-title"><span class="icon">&#128736;</span> IAM / Cybersecurity Product Landscape</div>
+
+  <table class="tbl">
+    <thead><tr><th>Category</th><th>Key Players</th><th>Thales Position</th><th>AI Disruption</th><th>Opportunity</th></tr></thead>
+    <tbody>
+      <tr><td><strong>CIAM</strong></td><td>Okta/Auth0, Ping, ForgeRock</td><td style="color:var(--green)">Strong &mdash; Top 5</td><td style="color:var(--amber)">Medium</td><td>Agent-aware CIAM, consent for AI</td></tr>
+      <tr><td><strong>Workforce IAM</strong></td><td>Microsoft Entra, Okta, CyberArk</td><td style="color:var(--text3)">Adjacent</td><td style="color:var(--red)">High</td><td>Machine identity for AI agents</td></tr>
+      <tr><td><strong>PAM</strong></td><td>CyberArk, BeyondTrust, Delinea</td><td style="color:var(--text3)">Via Thales parent</td><td style="color:var(--red)">High</td><td>Privileged agent access management</td></tr>
+      <tr><td><strong>IGA</strong></td><td>SailPoint, Saviynt, One Identity</td><td style="color:var(--amber)">Emerging</td><td style="color:var(--amber)">Medium</td><td>Agent lifecycle governance</td></tr>
+      <tr><td><strong>Identity Threat Detection</strong></td><td>CrowdStrike, Silverfort, Semperis</td><td style="color:var(--text3)">Whitespace</td><td style="color:var(--red)">Very High</td><td>AI-powered identity anomaly detection</td></tr>
+      <tr><td><strong>Machine Identity</strong></td><td>Venafi, Keyfactor, HashiCorp</td><td style="color:var(--amber)">Via Thales HSM</td><td style="color:var(--amber)">Medium</td><td>Agent certificates, API token mgmt</td></tr>
+    </tbody>
+  </table>
+
+  <div class="chart-row">
+    <div class="chart-box"><h4>OneWelcome Revenue Mix (Estimated)</h4><canvas id="c_rev"></canvas></div>
+    <div class="chart-box"><h4>AI Disruption Risk by Category</h4><canvas id="c_disrupt"></canvas></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- COMPETITIVE POSITION -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section" id="competitive">
+  <div class="section-title"><span class="icon">&#9878;</span> Competitive Position</div>
+
+  <div class="matrix">
+    <div class="mcell ms"><h4>Strengths</h4><ul>
+      <li>Thales parent: defence-grade trust, &euro;18B+ revenue</li>
+      <li>Deep European compliance DNA (GDPR, NIS2, DORA, eIDAS)</li>
+      <li>HSM/encryption heritage &mdash; hardware root of trust</li>
+      <li>Enterprise relationships in banking, government, telecom</li>
+      <li>Consent management &mdash; critical for AI-era CIAM</li>
+    </ul></div>
+    <div class="mcell mw"><h4>Weaknesses</h4><ul>
+      <li>Developer experience lags Auth0/Okta</li>
+      <li>North America market share trails competitors</li>
+      <li>&ldquo;Legacy vendor&rdquo; perception vs cloud-native challengers</li>
+      <li>Integration ecosystem smaller than Okta marketplace</li>
+      <li>AI/ML product capabilities not yet differentiated</li>
+    </ul></div>
+    <div class="mcell mo"><h4>Opportunities</h4><ul>
+      <li>Define &ldquo;Agent Identity Management&rdquo; category first</li>
+      <li>Thales HSM for hardware-backed agent identities</li>
+      <li>EU regulatory wave forcing mandatory IAM spend</li>
+      <li>GSI co-sell on AI-security transformation deals</li>
+      <li>Consent management as AI interaction trust layer</li>
+    </ul></div>
+    <div class="mcell mt"><h4>Threats</h4><ul>
+      <li>Hyperscaler IAM bundling (Entra, AWS IAM IC)</li>
+      <li>AI-native startups moving faster on agent identity</li>
+      <li>Okta/Auth0 developer ecosystem network effects</li>
+      <li>Anthropic/OpenAI building identity into agent frameworks</li>
+      <li>CISO budget paralysis awaiting AI threat clarity</li>
+    </ul></div>
+  </div>
+
+  <div class="chart-row">
+    <div class="chart-box"><h4>CIAM Competitive Map (Capability vs Reach)</h4><canvas id="c_comp"></canvas></div>
+    <div class="chart-box"><h4>AI-Era IAM Capability Radar</h4><canvas id="c_radar"></canvas></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- MESSAGING & DIFFERENTIATORS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section" id="messaging">
+  <div class="section-title"><span class="icon">&#128172;</span> Messaging &amp; Differentiators</div>
+  <div class="section-subtitle">McKinsey-grade positioning framework: what to say, to whom, and why it wins</div>
+
+  <div class="wide">
+    <h3>Core Positioning Statement</h3>
+    <div class="highlight">
+      <p><strong>&ldquo;Thales OneWelcome is the identity platform for the AI era &mdash; where every agent needs an identity, every interaction needs consent, and every action needs an audit trail. Built on defence-grade trust. Proven in the world&rsquo;s most regulated industries. Ready for the world&rsquo;s most capable AI.&rdquo;</strong></p>
+    </div>
+  </div>
+
+  <div class="pillars" style="grid-template-columns: repeat(4,1fr)">
+    <div class="pillar pb"><div class="pi">&#128737;</div><h4>Defence-Grade Trust</h4><p>Only IAM vendor backed by a &euro;18B+ defence company with HSM and encryption heritage. When AI stakes are highest, you need trust that&rsquo;s hardware-rooted.</p></div>
+    <div class="pillar pp"><div class="pi">&#128220;</div><h4>Compliance by Design</h4><p>Built for GDPR, NIS2, DORA, eIDAS, EU AI Act. Not bolted on. Not certified after the fact. Compliance is in the architecture, not the brochure.</p></div>
+    <div class="pillar pc"><div class="pi">&#129302;</div><h4>Agent-Ready Identity</h4><p>The first CIAM platform building native support for AI agent identities: authentication, scoped permissions, consent chains, and full audit lineage.</p></div>
+    <div class="pillar pa"><div class="pi">&#128274;</div><h4>Consent as Infrastructure</h4><p>In the AI era, consent isn&rsquo;t a checkbox &mdash; it&rsquo;s infrastructure. OneWelcome&rsquo;s consent management becomes the trust layer between AI agents and customers.</p></div>
+  </div>
+
+  <!-- Audience-Specific Messaging -->
+  <div class="wide"><h3>Audience-Specific Messaging Matrix</h3></div>
+
+  <table class="tbl">
+    <thead><tr><th>Audience</th><th>Primary Message</th><th>Proof Points</th><th>Call to Action</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>CISO</strong></td>
+        <td>&ldquo;AI agents are the new attack surface. Every agent is an identity you need to control. We make that controllable without slowing innovation.&rdquo;</td>
+        <td>Thales HSM heritage, NIS2/DORA compliance, identity threat detection integration</td>
+        <td>Agent Identity Security Assessment</td>
+      </tr>
+      <tr>
+        <td><strong>CTO / VP Engineering</strong></td>
+        <td>&ldquo;Ship AI features faster with built-in identity governance. No more retrofitting security after launch.&rdquo;</td>
+        <td>API-first CIAM, consent orchestration, developer SDKs</td>
+        <td>Technical POC: Agent Identity in Your Stack</td>
+      </tr>
+      <tr>
+        <td><strong>Chief Digital Officer</strong></td>
+        <td>&ldquo;Your AI-powered customer experiences need trust. Consent management + identity verification = customer confidence at scale.&rdquo;</td>
+        <td>Consent management capabilities, progressive profiling, GDPR compliance</td>
+        <td>AI CX Trust Architecture Workshop</td>
+      </tr>
+      <tr>
+        <td><strong>GSI Practice Lead</strong></td>
+        <td>&ldquo;Your clients are asking about AI identity governance. We have the platform and the reference architectures. Let&rsquo;s co-sell.&rdquo;</td>
+        <td>Co-sell packages, certification program, joint IP potential</td>
+        <td>Partner Enablement Session</td>
+      </tr>
+      <tr>
+        <td><strong>Board / C-Suite</strong></td>
+        <td>&ldquo;AI is your biggest opportunity and your biggest identity risk. The companies that govern AI identity will lead their industries. We&rsquo;re the platform.&rdquo;</td>
+        <td>Thales brand, EU regulatory leadership, enterprise customer logos</td>
+        <td>Executive Briefing: AI Identity Risk</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Competitive Differentiators -->
+  <div class="wide"><h3>Competitive Differentiators &mdash; Why OneWelcome Wins</h3></div>
+
+  <div class="accordion" id="diffAccordion">
+    <div class="acc-item">
+      <div class="acc-header">vs. Okta / Auth0 <span class="arr">&#9660;</span></div>
+      <div class="acc-body"><div class="acc-body-inner">
+        <p><strong>They say:</strong> Largest developer ecosystem, self-serve adoption, marketplace integrations.<br>
+        <strong>We say:</strong> Developer experience is table stakes. In the AI era, the differentiator is <strong>compliance depth</strong> and <strong>consent infrastructure</strong>. Okta doesn&rsquo;t have hardware-rooted trust. Okta doesn&rsquo;t have native GDPR consent management. Okta isn&rsquo;t backed by a defence company when the CISO asks &ldquo;who stands behind this in a breach?&rdquo;<br>
+        <strong>Win theme:</strong> Trust at scale, not just convenience at scale.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <div class="acc-header">vs. Microsoft Entra <span class="arr">&#9660;</span></div>
+      <div class="acc-body"><div class="acc-body-inner">
+        <p><strong>They say:</strong> Bundled with Azure/M365, massive enterprise footprint, Copilot integration.<br>
+        <strong>We say:</strong> Microsoft is the platform, not the security layer. Entra is great for workforce IAM inside the Microsoft ecosystem. For <strong>customer-facing identity</strong> (CIAM), <strong>multi-cloud</strong>, and <strong>regulated industries</strong> that need vendor independence, OneWelcome is purpose-built.<br>
+        <strong>Win theme:</strong> Platform-independent CIAM for multi-cloud, regulated enterprises.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <div class="acc-header">vs. CrowdStrike + SGNL (Identity Security) <span class="arr">&#9660;</span></div>
+      <div class="acc-body"><div class="acc-body-inner">
+        <p><strong>They say:</strong> AI-native identity threat detection, real-time identity protection, Falcon platform integration.<br>
+        <strong>We say:</strong> CrowdStrike detects identity threats. OneWelcome <strong>prevents</strong> them through proper identity architecture. Detection without governance is a fire alarm without a sprinkler system. We&rsquo;re complementary &mdash; and the better architectural foundation.<br>
+        <strong>Win theme:</strong> Prevention &gt; detection. Identity architecture &gt; identity monitoring.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <div class="acc-header">vs. Hyperscaler Native (AWS Cognito, GCP Identity) <span class="arr">&#9660;</span></div>
+      <div class="acc-body"><div class="acc-body-inner">
+        <p><strong>They say:</strong> Native integration, pay-as-you-go, no additional vendor.<br>
+        <strong>We say:</strong> Cloud-native IAM locks you into one cloud. Enterprise reality is multi-cloud. Regulated industries need <strong>sovereign, vendor-independent identity</strong>. OneWelcome works across all clouds with consistent compliance posture.<br>
+        <strong>Win theme:</strong> Sovereign identity for multi-cloud enterprises.</p>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- MYTHOS IMPACT -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section" id="mythos">
+  <div class="section-title"><span class="icon">&#9889;</span> Claude Mythos / Capybara &mdash; Impact Analysis</div>
+
+  <div class="wide" style="border-color:rgba(245,158,11,0.3)">
+    <h3>What Happened</h3>
+    <p>Late March 2026: A draft blog post in an unsecured Anthropic CMS revealed <strong>Claude Mythos</strong> &mdash; a new model tier (codename: Capybara) above Opus 4.6. Dramatically higher benchmarks in coding, reasoning, and cybersecurity. Anthropic confirmed: real, in limited early-access, and &ldquo;the most capable we&rsquo;ve built to date.&rdquo;</p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="val" style="color:var(--red);font-size:20px">Unprecedented</div><div class="label">Cybersecurity Risk (Anthropic&rsquo;s Assessment)</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--accent);font-size:20px">Above Opus</div><div class="label">Performance Tier</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--amber);font-size:20px">Very Expensive</div><div class="label">Serving Cost (Not GA)</div></div>
+    <div class="stat-card"><div class="val" style="color:var(--accent2)">3,000+</div><div class="label">Assets Exposed in Leak</div></div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card" style="border-left:3px solid var(--green)"><h3>Opportunity: CIAM Demand Surge</h3><p>More powerful AI = more sophisticated identity attacks. Direct tailwind for CIAM spend. Customers deferring will accelerate.</p></div>
+    <div class="card" style="border-left:3px solid var(--green)"><h3>Opportunity: GSI Leverage</h3><p>Deloitte, Capgemini, Accenture building Mythos-adjacent practices. Co-sell playbook framing OneWelcome as the identity layer in AI-era security stack.</p></div>
+    <div class="card" style="border-left:3px solid var(--red)"><h3>Threat: Direct Competition</h3><p>If Mythos gets embedded into hyperscaler security tooling, identity anomaly detection could be commoditised. Monitor Anthropic partnerships closely.</p></div>
+    <div class="card" style="border-left:3px solid var(--red)"><h3>Threat: Budget Paralysis</h3><p>CISOs may freeze CIAM budget pending clarity on Mythos-era threats. Antidote: create urgency through joint threat intelligence with GSIs.</p></div>
+  </div>
+
+  <div class="wide" style="border-color:rgba(59,130,246,0.3)">
+    <h3>Recommended Actions for Maarten &amp; Danny</h3>
+    <ul>
+      <li><strong>Week 1&ndash;2:</strong> Internal positioning paper: &ldquo;How OneWelcome fits the AI-era identity stack&rdquo;</li>
+      <li><strong>Week 3&ndash;4:</strong> Brief P1 GSIs on Mythos implications and co-sell opportunity</li>
+      <li><strong>Month 2:</strong> &ldquo;Mythos-proof your identity infrastructure&rdquo; campaign for enterprise customers</li>
+      <li><strong>Month 3:</strong> Agent identity management POC with flagship customer</li>
+      <li><strong>Ongoing:</strong> Monitor Anthropic&rsquo;s security partnerships for competitive signals</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- STRATEGIC ROADMAP -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section" id="roadmap">
+  <div class="section-title"><span class="icon">&#128204;</span> Strategic Roadmap</div>
+
+  <div class="timeline">
+    <div class="tl-item now"><div class="date">Q2 2026 &mdash; Now</div><h4>Foundation: Positioning &amp; Narrative</h4><p>Internal alignment with Maarten/Danny. First GSI conversations. Mythos impact brief. Agent identity POC scoping.</p></div>
+    <div class="tl-item"><div class="date">Q3 2026</div><h4>Build: GSI Partner Activation</h4><p>P1 GSI co-sell playbooks live. NIS2+CIAM bundle GA. Agent identity whitepaper. First joint pipeline with Deloitte/Capgemini.</p></div>
+    <div class="tl-item"><div class="date">Q4 2026</div><h4>Scale: Product &amp; Market</h4><p>Agent Identity Management beta. AI-powered consent for agent-to-human interactions. GSI certification program. First AIM deals closing.</p></div>
+    <div class="tl-item"><div class="date">H1 2027</div><h4>Lead: Category Definition</h4><p>Full AIM GA. Analyst engagement (Gartner, Forrester). North America expansion via GSI channel. Hardware-backed agent identity via HSM.</p></div>
+    <div class="tl-item"><div class="date">H2 2027</div><h4>Dominate: Ecosystem</h4><p>OneWelcome as default agent identity platform for enterprise AI. GSI-embedded delivery. EU AI Act identity standard participation.</p></div>
+  </div>
+
+  <div class="wide">
+    <h3>Success Metrics</h3>
+    <table class="tbl" style="margin:0">
+      <thead><tr><th>Metric</th><th>Baseline (Q2 2026)</th><th>Target (Q4 2026)</th><th>Target (Q4 2027)</th></tr></thead>
+      <tbody>
+        <tr><td>Active GSI Co-Sell Agreements</td><td>0</td><td>3</td><td>6+</td></tr>
+        <tr><td>Joint GSI Pipeline</td><td>&euro;0</td><td>&euro;5M</td><td>&euro;25M+</td></tr>
+        <tr><td>Agent Identity Mgmt Customers</td><td>0</td><td>2 (pilot)</td><td>20+</td></tr>
+        <tr><td>NIS2/DORA Bundle Deals</td><td>0</td><td>10</td><td>50+</td></tr>
+        <tr><td>GSI-Certified Consultants</td><td>0</td><td>50</td><td>200+</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- JAVASCRIPT -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<script>
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = '#1e293b';
+Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif';
+Chart.defaults.font.size = 11;
+
+function init() {
+  // IAM Market Growth
+  new Chart(document.getElementById('c_iam'), {
+    type:'bar', data:{
+      labels:['2022','2023','2024','2025','2026E','2027E','2028E'],
+      datasets:[
+        {label:'IAM Total ($B)',data:[16.2,18.5,21.3,25,28.7,33.1,38.6],backgroundColor:'rgba(59,130,246,0.6)',borderRadius:5},
+        {label:'CIAM Segment ($B)',data:[3.2,3.9,4.8,6.1,8.1,10.5,13.8],backgroundColor:'rgba(139,92,246,0.6)',borderRadius:5}
+      ]
+    }, options:{responsive:true,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:true,grid:{color:'#1e293b'}},x:{grid:{display:false}}}}
+  });
+
+  // Attack Vectors
+  new Chart(document.getElementById('c_attack'), {
+    type:'doughnut', data:{
+      labels:['Credential Stuffing','Phishing','Session Hijacking','Synthetic Identity','MFA Bypass','Token Theft'],
+      datasets:[{data:[28,22,16,14,12,8],backgroundColor:['#3b82f6','#8b5cf6','#06b6d4','#10b981','#f59e0b','#ef4444'],borderWidth:0}]
+    }, options:{responsive:true,plugins:{legend:{position:'right'}}}
+  });
+
+  // CIAM Verticals
+  new Chart(document.getElementById('c_vertical'), {
+    type:'bar', data:{
+      labels:['Financial Svc','Healthcare','Retail/eComm','Government','Telecom','Manufacturing'],
+      datasets:[{label:'%',data:[28,18,17,14,12,11],backgroundColor:['#3b82f6','#06b6d4','#8b5cf6','#10b981','#f59e0b','#64748b'],borderRadius:5}]
+    }, options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,grid:{color:'#1e293b'}},y:{grid:{display:false}}}}
+  });
+
+  // Regulatory
+  new Chart(document.getElementById('c_reg'), {
+    type:'radar', data:{
+      labels:['GDPR','NIS2','DORA','EU AI Act','eIDAS 2.0','PCI DSS 4.0'],
+      datasets:[
+        {label:'IAM Relevance',data:[95,88,85,78,82,72],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.08)',pointBackgroundColor:'#3b82f6'},
+        {label:'Thales Readiness',data:[92,80,78,60,75,70],borderColor:'#10b981',backgroundColor:'rgba(16,185,129,0.08)',pointBackgroundColor:'#10b981'}
+      ]
+    }, options:{responsive:true,scales:{r:{beginAtZero:true,max:100,grid:{color:'#1e293b'},angleLines:{color:'#1e293b'},pointLabels:{font:{size:10}}}}}
+  });
+
+  // GSI Investment
+  new Chart(document.getElementById('c_gsi_invest'), {
+    type:'bar', data:{
+      labels:['Deloitte','Accenture','PwC','EY','Capgemini','McKinsey'],
+      datasets:[{label:'AI Investment ($B)',data:[3.0,3.0,1.0,2.4,0.8,0.6],backgroundColor:['#3b82f6','#8b5cf6','#06b6d4','#10b981','#f59e0b','#64748b'],borderRadius:5}]
+    }, options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#1e293b'}},x:{grid:{display:false}}}}
+  });
+
+  // GSI Revenue/Bookings
+  new Chart(document.getElementById('c_gsi_revenue'), {
+    type:'bar', data:{
+      labels:['Accenture GenAI Rev','Accenture GenAI Book','Deloitte Total Rev','PwC Total Rev','EY AI Rev Growth'],
+      datasets:[{label:'$B (or % for EY)',data:[2.7,5.9,70.5,56.9,30],backgroundColor:['#8b5cf6','#a78bfa','#3b82f6','#06b6d4','#10b981'],borderRadius:5}]
+    }, options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#1e293b'}},x:{grid:{display:false}}}}
+  });
+
+  // Revenue Mix
+  new Chart(document.getElementById('c_rev'), {
+    type:'doughnut', data:{
+      labels:['CIAM License','Consent Mgmt','Identity Orchestration','Professional Services','Support'],
+      datasets:[{data:[42,18,15,14,11],backgroundColor:['#3b82f6','#8b5cf6','#06b6d4','#10b981','#64748b'],borderWidth:0}]
+    }, options:{responsive:true,plugins:{legend:{position:'right'}}}
+  });
+
+  // Disruption
+  new Chart(document.getElementById('c_disrupt'), {
+    type:'bar', data:{
+      labels:['Identity Threat Det.','PAM','Workforce IAM','CIAM','Machine Identity','IGA'],
+      datasets:[{label:'Risk',data:[92,78,75,55,50,48],backgroundColor:c=>c.raw>70?'rgba(239,68,68,0.6)':c.raw>50?'rgba(245,158,11,0.6)':'rgba(16,185,129,0.6)',borderRadius:5}]
+    }, options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,max:100,grid:{color:'#1e293b'}},y:{grid:{display:false}}}}
+  });
+
+  // Competitive Bubble
+  new Chart(document.getElementById('c_comp'), {
+    type:'bubble', data:{
+      datasets:[
+        {label:'OneWelcome',data:[{x:70,y:75,r:14}],backgroundColor:'rgba(59,130,246,0.7)'},
+        {label:'Okta/Auth0',data:[{x:92,y:88,r:22}],backgroundColor:'rgba(139,92,246,0.5)'},
+        {label:'Ping',data:[{x:78,y:72,r:12}],backgroundColor:'rgba(6,182,212,0.5)'},
+        {label:'ForgeRock',data:[{x:72,y:68,r:10}],backgroundColor:'rgba(16,185,129,0.5)'},
+        {label:'Microsoft Entra',data:[{x:85,y:90,r:28}],backgroundColor:'rgba(245,158,11,0.4)'},
+        {label:'AWS Cognito',data:[{x:60,y:55,r:18}],backgroundColor:'rgba(239,68,68,0.4)'}
+      ]
+    }, options:{responsive:true,scales:{x:{title:{display:true,text:'Technical Capability'},min:40,max:100,grid:{color:'#1e293b'}},y:{title:{display:true,text:'Market Reach'},min:40,max:100,grid:{color:'#1e293b'}}},plugins:{legend:{position:'top'}}}
+  });
+
+  // Radar
+  new Chart(document.getElementById('c_radar'), {
+    type:'radar', data:{
+      labels:['CIAM','Agent Identity','Compliance','AI Threat Det.','DevEx','Machine ID','Consent'],
+      datasets:[
+        {label:'Thales/OneWelcome',data:[82,35,90,40,55,70,85],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.08)',pointBackgroundColor:'#3b82f6'},
+        {label:'Okta/Auth0',data:[90,45,65,55,95,50,60],borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,0.08)',pointBackgroundColor:'#8b5cf6'},
+        {label:'Microsoft Entra',data:[70,50,75,72,80,65,55],borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,0.08)',pointBackgroundColor:'#f59e0b'}
+      ]
+    }, options:{responsive:true,scales:{r:{beginAtZero:true,max:100,grid:{color:'#1e293b'},angleLines:{color:'#1e293b'},pointLabels:{font:{size:10}}}}}
+  });
+}
+
+// NAV
+document.querySelectorAll('.nav-tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-tab').forEach(n=>n.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+  });
+});
+
+// ACCORDION
+document.querySelectorAll('.acc-header').forEach(h=>{
+  h.addEventListener('click',()=>{
+    const item = h.parentElement;
+    const body = item.querySelector('.acc-body');
+    const inner = body.querySelector('.acc-body-inner');
+    if(item.classList.contains('open')){
+      body.style.maxHeight = '0';
+      item.classList.remove('open');
+    } else {
+      body.style.maxHeight = inner.scrollHeight + 20 + 'px';
+      item.classList.add('open');
+    }
+  });
+});
+
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
